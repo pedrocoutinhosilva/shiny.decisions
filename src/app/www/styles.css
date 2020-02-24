@@ -1,0 +1,7 @@
+.metric-wrapper {
+  margin: 5px;
+}
+
+.metric-wrapper progress {
+  width: calc(100% - 8px);
+}
