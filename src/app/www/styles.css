@@ -1,7 +1,90 @@
+html, body { height: 100%; width: 100%; overflow: hidden; }
+
 .metric-wrapper {
-  margin: 5px;
+  margin: 15px 15px 15px 15px;
+  padding-left: 55px;
+  position: relative;
 }
 
 .metric-wrapper progress {
   width: calc(100% - 8px);
+}
+
+.nes-progress {
+  height: 25px !important;
+  margin: 0 !important;
+}
+
+.will-change-large {
+  /* color: red; */
+  -webkit-animation: color-change 1s infinite;
+  -moz-animation: color-change 1s infinite;
+  -o-animation: color-change 1s infinite;
+  -ms-animation: color-change 1s infinite;
+  animation: color-change 1s infinite;
+}
+
+.will-change {
+  /* color: yellow; */
+  -webkit-animation: color-change 1s infinite;
+  -moz-animation: color-change 1s infinite;
+  -o-animation: color-change 1s infinite;
+  -ms-animation: color-change 1s infinite;
+  animation: color-change 1s infinite;
+}
+
+@-webkit-keyframes color-change {
+    0% { color: white; }
+    50% { color: black; }
+    100% { color: white; }
+}
+@-moz-keyframes color-change {
+    0% { color: white; }
+    50% { color: black; }
+    100% { color: white; }
+}
+@-ms-keyframes color-change {
+    0% { color: white; }
+    50% { color: black; }
+    100% { color: white; }
+}
+@-o-keyframes color-change {
+    0% { color: white; }
+    50% { color: black; }
+    100% { color: white; }
+}
+@keyframes color-change {
+    0% { color: white; }
+    50% { color: black; }
+    100% { color: white; }
+}
+
+.leaflet-tile-container img {
+  filter: sepia(.7);
+}
+
+.metric-wrapper .metric-icon {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  width: 40px;
+  height: 40px;
+  background-position: center center;
+  background-size: 80%;
+  background-repeat: no-repeat;
+}
+
+.app-metrics {
+  color: #fff;
+  background-color: #212529;
+  z-index: 3;
+  box-shadow: 0px 5px 10px 0px rgba(0,0,0,0.75);
+}
+
+.app-cards {
+  overflow: visible;
+  z-index: 1;
+  box-shadow: -5px 0px 10px 0px rgba(0,0,0,0.75);
 }

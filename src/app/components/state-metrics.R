@@ -4,7 +4,6 @@ import("shiny.grid")
 import("glue")
 
 export('ui')
-export('init_server')
 
 
 metricCard <- function(id, label, class) {
@@ -28,17 +27,9 @@ ui <- function(id) {
 
     class = "metrics",
 
-    metricCard("stateKarma", "Evil", "metric-karma"),
-    metricCard("stateWealth", "Wealth", "metric-wealth"),
-    metricCard("stateOpinion", "Opinion", "metric-opinion"),
-    metricCard("stateEnviroment", "Enviroment", "metric-enviroment")
+    metricCard(ns("stateKarma"), "Evil", "metric-karma"),
+    metricCard(ns("stateWealth"), "Wealth", "metric-wealth"),
+    metricCard(ns("stateOpinion"), "Opinion", "metric-opinion"),
+    metricCard(ns("stateEnviroment"), "Enviroment", "metric-enviroment")
   )
-}
-
-init_server <- function(id) {
-  callModule(server, id)
-}
-
-server <- function(input, output, session) {
-  ns <- session$ns
 }

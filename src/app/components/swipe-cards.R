@@ -42,6 +42,7 @@ swipeCardStack <- function(inputId) {
       text-align: center;
       background-color: #212529;
       color: white;
+      padding: 20px;
     }
 
     #<<inputId>> {
@@ -64,6 +65,8 @@ swipeCardStack <- function(inputId) {
       box-shadow: 0px 4px 4px 0px rgba(0,0,0,0.1);
       background-color: white;
       transform: translateX(-50%) translateY(-50%) scale(0.95);
+      background-position: center center;
+      background-repeat: no-repeat;
     }
     ", .open = "<<", .close = ">>")
 
@@ -149,13 +152,38 @@ swipeCardStack <- function(inputId) {
 
       let dirX = e.deltaX < 0 ? -1 : 1
 
+      let delta_threshold = 10
+      let delta_direction = ''
+
       if(dirX > 0) {
         this.topCard.classList.add('dragging-right')
         this.topCard.classList.remove('dragging-left')
+        delta_direction = 'right'
       } else {
         this.topCard.classList.add('dragging-left')
         this.topCard.classList.remove('dragging-right')
+        delta_direction = 'left'
       }
+
+      Object.values(document.querySelectorAll(`.metric-wrapper`)).map(x => {
+        x.classList.remove('will-change', 'will-change-large')
+      })
+
+      Object.entries({
+        karma: Number(carousel.topCard.getAttribute(`delta-${delta_direction}-karma`)),
+        wealth: Number(carousel.topCard.getAttribute(`delta-${delta_direction}-weath`)),
+        opinion: Number(carousel.topCard.getAttribute(`delta-${delta_direction}-opinion`)),
+        enviroment: Number(carousel.topCard.getAttribute(`delta-${delta_direction}-enviroment`))
+      }).map(attribute => {
+        if(attribute[1] !== 0) {
+          document.querySelector(`.metric-${attribute[0]}`)
+            .classList.add(
+              (attribute[1]  > delta_threshold)
+                ? 'will-change-large'
+                : 'will-change'
+              )
+        }
+      })
 
       let deg = this.isDraggingFrom * dirX * Math.abs(propX) * 45
 
@@ -175,6 +203,10 @@ swipeCardStack <- function(inputId) {
 
         this.topCard.classList.remove('dragging-left')
         this.topCard.classList.remove('dragging-right')
+
+        Object.values(document.querySelectorAll(`.metric-wrapper`)).map(x => {
+          x.classList.remove('will-change', 'will-change-large')
+        })
 
         this.topCard.style.transition = 'transform 200ms ease-out'
         if (this.nextCard) this.nextCard.style.transition = 'transform 100ms linear'
@@ -248,7 +280,7 @@ swipeCardStack <- function(inputId) {
 
     }
 
-    push({ message, delta }) {
+    push({ background, message, delta }) {
 
       let card = document.createElement('div')
 
@@ -287,7 +319,7 @@ swipeCardStack <- function(inputId) {
       })
 
       card.style.backgroundImage =
-        `url('https://picsum.photos/320/320/?random=${Math.round(Math.random()*1000000)}')`
+        `url(${background})`
 
       if (this.board.firstChild) {
         this.board.insertBefore(card, this.board.firstChild)
@@ -301,7 +333,10 @@ swipeCardStack <- function(inputId) {
   let carousel = new Carousel(document.querySelector('#<<inputId>>'))
 
   let addCard = function(options) {
-    carousel.push(options)
+
+    console.log(options)
+
+    Object.values(options).map(card => carousel.push(card))
     carousel.handle()
   }
 
