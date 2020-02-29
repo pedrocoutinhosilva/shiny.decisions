@@ -3,8 +3,8 @@ blankPage(
   theme = "nes",
 
   tags$head(
-    tags$script(src = "https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"),
-    tags$link(rel = "stylesheet", type = "text/css", href = "styles.css")
+    tags$script(src = "scripts/hammer.min.js"),
+    tags$link(rel = "stylesheet", type = "text/css", href = "styles/styles.css")
   ),
 
   gridPanel(
@@ -21,12 +21,12 @@ blankPage(
 
     gridPanel(
       position = "app-cards",
-      swipeCards$swipeCardStack("stack")
+      swipeCards$swipeCardStack()
     ),
 
     gridPanel(
       position = "app-map",
-      mainMap$ui("mainMap")
+      gameManager$ui$map("map")
     )
   )
 )

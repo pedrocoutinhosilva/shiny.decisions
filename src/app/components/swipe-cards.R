@@ -4,72 +4,7 @@ import("shiny.blank")
 
 export("swipeCardStack")
 
-swipeCardStack <- function(inputId) {
-
-  style <- glue::glue(
-    "
-    #<<inputId>>_wrapper {
-      width: 100%;
-      height: 100%;
-      position: relative;
-      background-color: #212529;
-      overflow: visible;
-    }
-
-    #<<inputId>> .message-left,
-    #<<inputId>> .message-right {
-      display: none;
-      padding: 5px;
-    }
-
-    #<<inputId>> .message-right {
-      text-align: right;
-    }
-
-    #<<inputId>> .dragging-left .message-left,
-    #<<inputId>> .dragging-right .message-right {
-      display: block;
-    }
-
-
-
-    #<<inputId>>_message{
-      width: 100%;
-      height: 200px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      background-color: #212529;
-      color: white;
-      padding: 20px;
-    }
-
-    #<<inputId>> {
-      width: 100%;
-      height: calc(100% - 200px);
-      position: absolute;
-      bottom: 0;
-      overflow: hidden;
-      background-color: #212529;
-      overflow: visible;
-    }
-    #{inputId} .card {
-      border: 2px solid white;
-      width: 320px;
-      height: 320px;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      border-radius: 1%;
-      box-shadow: 0px 4px 4px 0px rgba(0,0,0,0.1);
-      background-color: white;
-      transform: translateX(-50%) translateY(-50%) scale(0.95);
-      background-position: center center;
-      background-repeat: no-repeat;
-    }
-    ", .open = "<<", .close = ">>")
-
+swipeCardStack <- function(inputId = "card_stack") {
 
   script <- glue::glue("
   class Carousel {
@@ -354,5 +289,5 @@ swipeCardStack <- function(inputId) {
     div(id = inputId)
   )
 
-  component(html = html, style = HTML(style), script = HTML(script))
+  component(html = html, script = HTML(script))
 }

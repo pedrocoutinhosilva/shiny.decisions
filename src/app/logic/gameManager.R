@@ -23,30 +23,33 @@ gameManager <- R6Class("gameManager",
   ),
 
   public = list(
+    ui = NULL,
+    init_server = function() {
+      private$metricsManager$init_server("metrics", self$gameState)
+      private$mapManager$init_server("map", self$gameState)
+    },
+
     newGame = function() {
       private$stateManager <- stateManager$new()
       private$metricsManager <- metricsManager$new()
+      private$mapManager <- mapManager$new()
       # private$deckManager <- deckManager$new()
-      # private$mapManager <- mapManager$new()
 
       self$gameState = private$stateManager$state
 
       self$ui = list(
-        metrics = private$metricsManager$ui
+        metrics = private$metricsManager$ui,
+        map = private$mapManager$ui
       )
     },
 
-    ui = NULL,
-
-    init_server = function() {
-      private$metricsManager$init_server("metrics", self$gameState)
-    },
-
-    gameState = NULL,
-
     endGame = function() {},
 
-    updateStatus = function() {},
+    gameState = NULL,
+    
+    updateState = function(newState) {
+      private$stateManager$updateState(newState)
+    },
 
     initialize = function() {
       self$newGame()
