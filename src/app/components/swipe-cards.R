@@ -217,6 +217,8 @@ swipeCardStack <- function(inputId = "card_stack") {
 
     push({ background, message, delta }) {
 
+      console.log(background, message, delta)
+
       let card = document.createElement('div')
 
       let message_left = document.createElement('p')
@@ -271,11 +273,16 @@ swipeCardStack <- function(inputId = "card_stack") {
 
     console.log(options)
 
-    Object.values(options).map(card => carousel.push(card))
+    carousel.push(options)
+
     carousel.handle()
   }
-
   Shiny.addCustomMessageHandler('add_card', addCard);
+
+  let gameOver = function(options) {
+    modal_gameOverScreen.classList.add('open')
+  }
+  Shiny.addCustomMessageHandler('game_over', gameOver);
 
   ", .open = "<<", .close = ">>")
 
@@ -284,7 +291,7 @@ swipeCardStack <- function(inputId = "card_stack") {
 
     div(
       id = glue::glue("{inputId}_message"),
-      p("This is a card description. ")
+      p("")
     ),
     div(id = inputId)
   )

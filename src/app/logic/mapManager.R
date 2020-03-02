@@ -8,6 +8,7 @@ import("shiny")
 
 export("mapManager")
 
+# continents <- readLines("data/continents.json") %>% paste(collapse = "\n")
 
 ui <- function(id) {
   ns <- NS(id)
@@ -23,6 +24,7 @@ server <- function(input, output, session, state) {
       addProviderTiles("Stamen.Watercolor",
         options = providerTileOptions(noWrap = TRUE)
       ) %>%
+      # addGeoJSON(continents, weight = 1, color = "#444444", fill = FALSE) %>%
       setView(0, 0, 2)
   })
 }

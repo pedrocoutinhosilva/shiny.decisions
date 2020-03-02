@@ -7,6 +7,8 @@ blankPage(
     tags$link(rel = "stylesheet", type = "text/css", href = "styles/styles.css")
   ),
 
+  gameManager$ui$gameStages(),
+
   gridPanel(
     grid_template_rows = "100px 1fr",
     grid_template_areas = c(

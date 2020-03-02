@@ -161,3 +161,11 @@ html, body { height: 100%; width: 100%; overflow: hidden; }
   background-position: center center;
   background-repeat: no-repeat;
 }
+
+.entry-screen {
+  min-height: 50vh !important;
+
+  text-align: center;
+  justify-content: center;
+  align-items: center;  
+}

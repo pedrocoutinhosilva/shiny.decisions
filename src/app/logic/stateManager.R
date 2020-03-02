@@ -25,6 +25,17 @@ stateManager <- R6Class("stateManager",
       ), TRUE))
     },
 
+    isDeathState = function() {
+      if(self$state$weath < 1 ||
+         self$state$opinion < 1 ||
+         self$state$enviroment < 1
+      ) {
+        return (TRUE)
+      } else {
+        return (FALSE)
+      }
+    },
+
     updateState = function(newState, force = FALSE) {
       lapply(names(newState), function(attribute) {
           self$state[[attribute]] <- ifelse (
