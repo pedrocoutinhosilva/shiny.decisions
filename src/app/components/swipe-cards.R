@@ -216,10 +216,10 @@ swipeCardStack <- function(inputId = "card_stack") {
     }
 
     push({ background, message, delta }) {
-
-      console.log(background, message, delta)
-
       let card = document.createElement('div')
+
+      let card_color = document.createElement('div')
+      let card_image = document.createElement('div')
 
       let message_left = document.createElement('p')
       let message_right = document.createElement('p')
@@ -232,6 +232,9 @@ swipeCardStack <- function(inputId = "card_stack") {
 
       card.append(message_left)
       card.append(message_right)
+
+      card.append(card_image)
+      card.append(card_color)
 
       card.classList.add('card')
 
@@ -255,8 +258,18 @@ swipeCardStack <- function(inputId = "card_stack") {
         card.setAttribute(attribute[0], attribute[1])
       })
 
-      card.style.backgroundImage =
-        `url(${background})`
+      card_image.classList.add('card-background')
+      card_color.classList.add('card-background')
+
+      card_color.style.background = `linear-gradient(
+        135deg,
+        ${background.color_left} 0%,
+        ${background.color_left} 50%,
+        ${background.color_right} 51%,
+        ${background.color_right} 100%)`
+
+      //card_image.style.background =
+        //`url(${background.image})`
 
       if (this.board.firstChild) {
         this.board.insertBefore(card, this.board.firstChild)
@@ -274,7 +287,6 @@ swipeCardStack <- function(inputId = "card_stack") {
     console.log(options)
 
     carousel.push(options)
-
     carousel.handle()
   }
   Shiny.addCustomMessageHandler('add_card', addCard);

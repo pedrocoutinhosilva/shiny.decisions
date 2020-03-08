@@ -10,9 +10,12 @@ DataManager <- R6Class("DataManager",
     data = NULL,
 
     options = NULL,
-    cards = list(),
+    gameSettings = NULL,
 
-    cardTypes = c("Bad", "Good", "Special")
+    cards = list(),
+    decks = list(),
+
+    cardTypes = c("Tutorial", "Bad", "Good", "Special", "Death")
   ),
 
   public = list(
@@ -29,6 +32,8 @@ DataManager <- R6Class("DataManager",
         })
       }
 
+      private$gameSettings <- gs_read(data, ws = "Game Settings")
+      private$decks <- gs_read(data, ws = "Decks")
       private$options <- gs_read(data, ws = "Options")
 
       lapply(private$cardTypes, function(type) {
@@ -40,12 +45,24 @@ DataManager <- R6Class("DataManager",
       return(private$data)
     },
 
+    getGameSettings = function(gameType) {
+      return(private$gameSettings[which(private$gameSettings$`Game Type` == gameType), ])
+    },
+
     getCardTypes = function() {
       return(private$cardTypes)
     },
 
     getOptions = function(attribute) {
       return(drop_na(private$options[attribute]))
+    },
+
+    getDecks = function() {
+      return(private$decks)
+    },
+    getDeckOptions = function(name) {
+      decks <- self$getDecks()
+      return(decks[which(decks$`Deck Name` == name), ])
     },
 
     getCards = function() {

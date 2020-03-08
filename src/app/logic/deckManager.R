@@ -7,63 +7,41 @@ import("utils")
 
 export("deckManager")
 
-templateManager <- use("logic/dataManager.R")$DataManager
+cleanCardMessage <- function(string) {
+  stringr::str_replace_all(
+    string,
+    c("\\{" = "{`", "\\}" = "`}")
+  )
+}
 
 deckManager <- R6Class("deckManager",
-
   private = list(
-    currentPhase = NULL,
+    gameSettings = NULL,
+    dataManager = NULL,
+
+    gameFlow = NULL,
     currentDeck = NULL,
-    availableDecks = NULL,
-
-    templateManager = NULL,
-
-    loadNextDeck = function(randomizeCards = FALSE) {
-      if (randomizeCards) {
-        private$currentDeck <-
-          jsonlite::read_json(glue::glue("cards/{private$availableDecks[1]}.json"))$cards
-      } else {
-        private$currentDeck <-
-          sample(jsonlite::read_json(glue::glue("cards/{private$availableDecks[1]}.json"))$cards)
-      }
-
-      private$currentPhase <- private$availableDecks[1]
-
-      if(length(private$availableDecks) != 1)
-        private$availableDecks <- private$availableDecks[-1]
-    },
-
-    loadDeathDeck = function() {
-      private$currentDeck <- jsonlite::read_json(glue::glue("cards/death.json"))$cards
-    }
-  ),
-
-  public = list(
-
-    getDeck = function() {
-      private$currentDeck
-    },
-
-    getPhase = function() {
-      private$currentPhase
-    },
-
-    triggerDeathPhase = function() {
-      if(private$currentPhase != "death") {
-        private$currentPhase = "death"
-        private$loadDeathDeck()
-      }
-    },
 
     generateTemplateCard = function() {
+      deckOptions <- private$gameFlow[[private$currentDeck]]
+
       cardType <- sample(
-        private$templateManager$getCardTypes(),
+        strsplit(deckOptions$`Card Pool`, ", ")[[1]],
         size = 1,
-        prob = c(0.50, 0.45, 0.05),
+        prob = strsplit(deckOptions$`Pool Weight`, ", ")[[1]],
         replace = TRUE
       )
 
-      cardTemplate <- sample_n(private$templateManager$getCards()[[cardType]], 1)
+      if (private$gameFlow[[private$currentDeck]]$`Order Fixed`) {
+        deckLimit <- nrow(private$dataManager$getCards()[[cardType]])
+        deckSize <- as.numeric(private$gameFlow[[private$currentDeck]]$`Deck Size`)
+
+        currentCardRow <- deckLimit - deckSize
+
+        cardTemplate <- private$dataManager$getCards()[[cardType]][currentCardRow, ]
+      } else {
+        cardTemplate <- sample_n(private$dataManager$getCards()[[cardType]], 1)
+      }
 
       intensityLevel <- sample(
         c(1:10),
@@ -72,90 +50,129 @@ deckManager <- R6Class("deckManager",
         replace = TRUE
       )
 
-      task <- stringr::str_replace_all(
-        cardTemplate$`Template`,
-        c("\\{" = "{`", "\\}" = "`}")
-      )
+      options <- vector("list", length(names(private$dataManager$getOptions())))
 
-      options <- vector("list", length(names(private$templateManager$getOptions())))
-
-      names(options) <- names(private$templateManager$getOptions())
+      names(options) <- names(private$dataManager$getOptions())
 
       for ( option in names(options)){
-          options[option] <- sample_n(private$templateManager$getOptions(option), 1)
+          options[option] <- sample_n(private$dataManager$getOptions(option), 1)
       }
 
       options <- modifyList(options, list(
-        `Danger Level` = private$templateManager$getOptions("Danger Level")[intensityLevel,],
-        `Prosperity Level` = private$templateManager$getOptions("Danger Level")[intensityLevel,]
+        `Danger Level` = private$dataManager$getOptions("Danger Level")[intensityLevel, ],
+        `Prosperity Level` = private$dataManager$getOptions("Prosperity Level")[intensityLevel, ]
       ))
 
-      task <- do.call(glue::glue, modifyList(list(task), options))
+      color_scale <- private$dataManager$getOptions(
+        as.character(glue::glue("{cardType} Color Scale"))
+      )
+
+      background_colors <- list(
+        left = as.character(color_scale[((intensityLevel * 2) - 1), ]),
+        right = as.character(color_scale[(intensityLevel * 2), ])
+      )
 
       card <- list(
-        background = "assets/cards/taxman.png",
+        background = list(
+          image = glue::glue("assets/cards/{cardTemplate$`Image`}.png"),
+          color_left = background_colors$left,
+          color_right = background_colors$right
+        ),
         message = list (
-          task = task,
-          left = do.call(glue::glue, modifyList(list(options$`Ignore Message`), options)),
-          right = do.call(glue::glue, modifyList(list(options$`Help Message`), options))
+          task = do.call(
+            glue::glue,
+            modifyList(list(cleanCardMessage(cardTemplate$`Template`)), options)
+          ),
+          left = do.call(
+            glue::glue,
+            modifyList(list(options$`Ignore Message`), options)
+          ),
+          right = do.call(
+            glue::glue,
+            modifyList(list(options$`Help Message`), options)
+          )
         ),
         delta = list(
           left = list(
-            karma = 0,
-            weath = 0,
-            opinion = 0,
-            enviroment = 0
+            karma = cardTemplate$`Left Karma`,
+            weath = cardTemplate$`Left Wealth`,
+            opinion = cardTemplate$`Left Opinion`,
+            enviroment = cardTemplate$`Left Enviroment`
           ),
           right = list(
-            karma = 0,
-            weath = 0,
-            opinion = 0,
-            enviroment = 0
+            karma = cardTemplate$`Right Karma`,
+            weath = cardTemplate$`Right Wealth`,
+            opinion = cardTemplate$`Right Opinion`,
+            enviroment = cardTemplate$`Right Enviroment`
           )
         )
       )
 
       return (card)
+    }
+  ),
+
+  public = list(
+    getCurrentDeck = function() { private$currentDeck },
+
+    triggerDeathPhase = function() {
+      private$currentDeck = "Death"
     },
 
-    resetState = function(skipTutorial = FALSE) {
-      private$currentPhase <- ""
-      private$currentDeck <- list()
+    resetState = function(gameType = "Medium", skipTutorial = FALSE, dataManager) {
+      private$dataManager <- dataManager
+      private$gameSettings <- private$dataManager$getGameSettings(gameType)
 
-      if (is.null(private$templateManager)) {
-        private$templateManager <- templateManager$new(
-          "1LwIPKAxbKvuGyMKktcTVuYZbTda0WMQxmNMhxqaQhGg"
-        )
-      }
+      private$gameFlow <- list()
 
-      if (skipTutorial) {
-        private$availableDecks <- c("earlygame", "midgame", "lategame")
+      specialDecks <- strsplit(private$gameSettings$`Special Decks`, ", ")[[1]]
+      gameTypeDecks <- strsplit(private$gameSettings$`Fixed Decks`, ", ")[[1]]
+      gameDeckSizes <- strsplit(private$gameSettings$`Deck Sizes`, ", ")[[1]]
+
+      lapply(gameTypeDecks, function(deckName) {
+        options <- private$dataManager$getDeckOptions(deckName)
+
+        deckIndex <- which(gameTypeDecks == deckName)[1]
+        nextDeckIndex <- deckIndex + 1
+        if(nextDeckIndex > length(gameTypeDecks)) nextDeckIndex <- length(gameTypeDecks)
+        options$`Next Deck` <- gameTypeDecks[[nextDeckIndex]]
+        options$`Deck Size` <- gameDeckSizes[[deckIndex]]
+        private$gameFlow[[deckName]] <- options
+      })
+
+      lapply(specialDecks, function(deckName) {
+        options <- private$dataManager$getDeckOptions(deckName)
+
+        options$`Next Deck` <- deckName
+        options$`Deck Size` <- nrow(private$dataManager$getCards()[[deckName]])
+
+        private$gameFlow[[deckName]] <- options
+      })
+
+      if(!skipTutorial) {
+        private$currentDeck <- "Tutorial"
+        private$gameFlow[["Tutorial"]]$`Next Deck` <- gameTypeDecks[1]
       } else {
-        private$availableDecks <- c("tutorial", "earlygame", "midgame", "lategame")
+        private$currentDeck <- gameTypeDecks[1]
       }
     },
 
     popCard = function() {
+      if(private$gameFlow[[private$currentDeck]]$`Deck Size` == 0) {
+        if(private$currentDeck == "Death") return("GAMEOVER")
 
-      # if(length(private$currentDeck) == 0) {
-      #   if(private$currentPhase == "death") {
-      #     return("GAMEOVER")
-      #   } else {
-      #     private$loadNextDeck()
-      #   }
-      # }
-      #
-      # nextCard <- private$currentDeck[1]
-      #
-      # private$currentDeck <- private$currentDeck[-1]
+        private$currentDeck <- private$gameFlow[[private$currentDeck]]$`Next Deck`
+      }
 
-      nextCard <- self$generateTemplateCard()
+      newSize <- as.numeric(private$gameFlow[[private$currentDeck]]$`Deck Size`) - 1
 
-      return(nextCard)
+      private$gameFlow[[private$currentDeck]]$`Deck Size` <- newSize
+
+      return(private$generateTemplateCard())
     },
 
-    initialize = function() {
-      self$resetState()
+    initialize = function(dataManager) {
+      self$resetState(dataManager = dataManager)
     }
   )
 )

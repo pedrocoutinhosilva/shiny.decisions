@@ -13,6 +13,8 @@ deckManager <- use("logic/deckManager.R")$deckManager
 mapManager <- use("logic/mapManager.R")$mapManager
 metricsManager <- use("logic/metricsManager.R")$metricsManager
 
+dataManager <- use("logic/dataManager.R")$DataManager
+
 # data related to game state
 ui <- function() {
   tagList(
@@ -20,8 +22,8 @@ ui <- function() {
       "entryScreen",
       content = gridPanel(
         class = "entry-screen",
-        grid_template_areas = c("intro", "navigation"),
-        grid_template_rows = "1fr 50px",
+        areas = c("intro", "navigation"),
+        rows = "1fr 50px",
 
         div(
           class = "intro",
@@ -30,8 +32,22 @@ ui <- function() {
         div(
           class = "navigation",
           button(
-            "startGame",
-            "Start Game",
+            "startGameEasy",
+            "Easy Mode",
+            actions = list(
+              click = "modal_entryScreen.classList.remove('open')"
+            )
+          ),
+          button(
+            "startGameMedium",
+            "Medium Mode",
+            actions = list(
+              click = "modal_entryScreen.classList.remove('open')"
+            )
+          ),
+          button(
+            "startGameHard",
+            "Hard Mode",
             actions = list(
               click = "modal_entryScreen.classList.remove('open')"
             )
@@ -47,7 +63,7 @@ ui <- function() {
       "gameOverScreen",
       content = gridPanel(
 
-        grid_template_areas = c("intro", "navigation"),
+        areas = c("intro", "navigation"),
 
         div(
           class = "intro",
@@ -78,6 +94,9 @@ gameManager <- R6Class("gameManager",
     deckManager = NULL,
     mapManager = NULL,
     metricsManager = NULL,
+    dataManager = NULL,
+
+    gameType = "Medium",
 
     session = NULL,
 
@@ -85,7 +104,14 @@ gameManager <- R6Class("gameManager",
       private$stateManager <- stateManager$new()
       private$metricsManager <- metricsManager$new()
       private$mapManager <- mapManager$new()
-      private$deckManager <- deckManager$new()
+
+      if (is.null(private$dataManager)) {
+        private$dataManager <- dataManager$new(
+          "1LwIPKAxbKvuGyMKktcTVuYZbTda0WMQxmNMhxqaQhGg"
+        )
+      }
+
+      private$deckManager <- deckManager$new(private$dataManager)
 
       self$ui = list(
         gameStages = ui,
@@ -111,13 +137,13 @@ gameManager <- R6Class("gameManager",
     },
 
     resetGame = function() {
-      self$startGame(TRUE)
+      self$startGame(private$gameType, TRUE)
     },
 
-    startGame = function(skipTutorial = FALSE) {
+    startGame = function(gameType, skipTutorial = FALSE) {
       private$resetState()
       private$stateManager$resetState()
-      private$deckManager$resetState(skipTutorial)
+      private$deckManager$resetState(gameType, skipTutorial, private$dataManager)
 
       card <- self$popCard()
 

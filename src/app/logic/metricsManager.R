@@ -24,7 +24,7 @@ ui <- function(id) {
   ns <- NS(id)
 
   gridPanel(
-    grid_template_areas = c(
+    areas = c(
       "metric-karma metric-wealth metric-opinion metric-enviroment"
     ),
     class = "metrics",

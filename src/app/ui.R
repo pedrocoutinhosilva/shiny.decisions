@@ -10,24 +10,24 @@ blankPage(
   gameManager$ui$gameStages(),
 
   gridPanel(
-    grid_template_rows = "100px 1fr",
-    grid_template_areas = c(
+    rows = "100px 1fr",
+    areas = c(
       "app-metrics app-metrics app-metrics",
       "app-map app-map app-cards"
     ),
 
     gridPanel(
-      position = "app-metrics",
+      class = "app-metrics",
       gameManager$ui$metrics("metrics")
     ),
 
     gridPanel(
-      position = "app-cards",
+      class = "app-cards",
       swipeCards$swipeCardStack()
     ),
 
     gridPanel(
-      position = "app-map",
+      class = "app-map",
       gameManager$ui$map("map")
     )
   )

@@ -9,6 +9,15 @@ function(input, output, session) {
   observeEvent(input$startGame, {
     gameManager$startGame()
   })
+  observeEvent(input$startGameEasy, {
+    gameManager$startGame("Easy")
+  })
+  observeEvent(input$startGameMedium, {
+    gameManager$startGame("Medium")
+  })
+  observeEvent(input$startGameHard, {
+    gameManager$startGame("Hard")
+  })
   observeEvent(input$restartGame, {
     gameManager$resetGame()
   })
