@@ -72,9 +72,15 @@ deckManager <- R6Class("deckManager",
         right = as.character(color_scale[(intensityLevel * 2), ])
       )
 
+      background_image <- ifelse (
+        cardTemplate$`Image` == "random",
+        paste0(sample(list.files('www/assets/cards'), 1)),
+        glue::glue("{cardTemplate$`Image`}.png")
+      )
+
       card <- list(
         background = list(
-          image = glue::glue("assets/cards/{cardTemplate$`Image`}.png"),
+          image = glue::glue("assets/cards/{background_image}"),
           color_left = background_colors$left,
           color_right = background_colors$right
         ),
@@ -124,7 +130,6 @@ deckManager <- R6Class("deckManager",
       private$gameSettings <- private$dataManager$getGameSettings(gameType)
 
       private$gameFlow <- list()
-
       specialDecks <- strsplit(private$gameSettings$`Special Decks`, ", ")[[1]]
       gameTypeDecks <- strsplit(private$gameSettings$`Fixed Decks`, ", ")[[1]]
       gameDeckSizes <- strsplit(private$gameSettings$`Deck Sizes`, ", ")[[1]]

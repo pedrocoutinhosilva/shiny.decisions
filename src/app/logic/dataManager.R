@@ -60,6 +60,7 @@ DataManager <- R6Class("DataManager",
     getDecks = function() {
       return(private$decks)
     },
+    
     getDeckOptions = function(name) {
       decks <- self$getDecks()
       return(decks[which(decks$`Deck Name` == name), ])

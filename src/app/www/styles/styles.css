@@ -113,10 +113,16 @@ html, body { height: 100%; width: 100%; overflow: hidden; }
 #card_stack .message-right {
   display: none;
   padding: 5px;
+  position: absolute;
+  z-index: 4;
+  left: 5px;
+  right: 5px;
+  color: black;
 }
 
 #card_stack .message-right {
   text-align: right;
+  right: 0;
 }
 
 #card_stack .dragging-left .message-left,
@@ -176,4 +182,15 @@ html, body { height: 100%; width: 100%; overflow: hidden; }
   bottom: 0;
   left: 0;
   right: 0;
+}
+
+.card-image {
+  z-index: 2;
+
+  background-size: 80% 80% !important;
+  background-repeat: no-repeat !important;
+  background-position: bottom center !important;
+}
+.card-color {
+  z-index: 1;
 }

@@ -15,6 +15,28 @@ metricsManager <- use("logic/metricsManager.R")$metricsManager
 
 dataManager <- use("logic/dataManager.R")$DataManager
 
+game_buttons <- function() {
+  div(
+    class = "navigation",
+    lapply(
+      list(
+        list(id = "startGameEasy", text = "Easy Mode"),
+        list(id = "startGameMedium", text = "Medium Mode"),
+        list(id = "startGameHard", text = "Hard Mode")
+      ),
+      function(options) {
+        button(
+          options$id,
+          options$text,
+          actions = list(
+            click = "modal_entryScreen.classList.remove('open');"
+          )
+        )
+      }
+    )
+  )
+}
+
 # data related to game state
 ui <- function() {
   tagList(
@@ -29,30 +51,7 @@ ui <- function() {
           class = "intro",
           "Welcome to shiny decisions! A game about making the best of bad situations"
         ),
-        div(
-          class = "navigation",
-          button(
-            "startGameEasy",
-            "Easy Mode",
-            actions = list(
-              click = "modal_entryScreen.classList.remove('open')"
-            )
-          ),
-          button(
-            "startGameMedium",
-            "Medium Mode",
-            actions = list(
-              click = "modal_entryScreen.classList.remove('open')"
-            )
-          ),
-          button(
-            "startGameHard",
-            "Hard Mode",
-            actions = list(
-              click = "modal_entryScreen.classList.remove('open')"
-            )
-          )
-        )
+        game_buttons()
       ),
       open = TRUE,
       softClose = FALSE,

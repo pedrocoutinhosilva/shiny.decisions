@@ -258,8 +258,8 @@ swipeCardStack <- function(inputId = "card_stack") {
         card.setAttribute(attribute[0], attribute[1])
       })
 
-      card_image.classList.add('card-background')
-      card_color.classList.add('card-background')
+      card_image.classList.add('card-background', 'card-image')
+      card_color.classList.add('card-background', 'card-color')
 
       card_color.style.background = `linear-gradient(
         135deg,
@@ -268,8 +268,8 @@ swipeCardStack <- function(inputId = "card_stack") {
         ${background.color_right} 51%,
         ${background.color_right} 100%)`
 
-      //card_image.style.background =
-        //`url(${background.image})`
+      card_image.style.background =
+        `url(${background.image})`
 
       if (this.board.firstChild) {
         this.board.insertBefore(card, this.board.firstChild)
