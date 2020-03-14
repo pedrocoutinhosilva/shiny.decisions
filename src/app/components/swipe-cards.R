@@ -185,20 +185,17 @@ swipeCardStack <- function(inputId = "card_stack") {
             }
           }
 
-          console.log(delta)
-
           setTimeout(() => {
             Shiny.setInputValue('update_state', {
               karma: delta.karma,
               weath: delta.wealth,
               opinion: delta.opinion,
-              enviroment: delta.enviroment
+              enviroment: delta.enviroment,
+              week: 1
             }, {priority : 'event'})
 
             this.board.removeChild(this.topCard)
             this.handle()
-
-            console.log('card removed', direction, e.direction)
 
           }, 200)
 
@@ -237,8 +234,6 @@ swipeCardStack <- function(inputId = "card_stack") {
       card.append(card_color)
 
       card.classList.add('card')
-
-      console.log(message, delta)
 
       Object.entries({
         'message-task': message.task,
@@ -283,9 +278,6 @@ swipeCardStack <- function(inputId = "card_stack") {
   let carousel = new Carousel(document.querySelector('#<<inputId>>'))
 
   let addCard = function(options) {
-
-    console.log(options)
-
     carousel.push(options)
     carousel.handle()
   }

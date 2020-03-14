@@ -194,3 +194,11 @@ html, body { height: 100%; width: 100%; overflow: hidden; }
 .card-color {
   z-index: 1;
 }
+
+.leaflet-marker-icon {
+  filter: drop-shadow(2px 2px 0 black) drop-shadow(-2px -2px 0 black);
+}
+
+.marker-trees {
+  z-index: 1 !important;
+}

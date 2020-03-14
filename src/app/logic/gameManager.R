@@ -102,13 +102,17 @@ gameManager <- R6Class("gameManager",
     resetState = function() {
       private$stateManager <- stateManager$new()
       private$metricsManager <- metricsManager$new()
-      private$mapManager <- mapManager$new()
 
       if (is.null(private$dataManager)) {
         private$dataManager <- dataManager$new(
           "1LwIPKAxbKvuGyMKktcTVuYZbTda0WMQxmNMhxqaQhGg"
         )
       }
+
+      private$mapManager <- mapManager$new(
+        private$stateManager,
+        private$dataManager
+      )
 
       private$deckManager <- deckManager$new(private$dataManager)
 
@@ -132,7 +136,7 @@ gameManager <- R6Class("gameManager",
       private$session <- session
 
       private$metricsManager$init_server("metrics", self$gameState)
-      private$mapManager$init_server("map", self$gameState)
+      private$mapManager$init_server("map")
     },
 
     resetGame = function() {
@@ -143,6 +147,8 @@ gameManager <- R6Class("gameManager",
       private$resetState()
       private$stateManager$resetState()
       private$deckManager$resetState(gameType, skipTutorial, private$dataManager)
+
+      private$mapManager$updateState(private$session)
 
       card <- self$popCard()
 
@@ -161,11 +167,14 @@ gameManager <- R6Class("gameManager",
     gameState = NULL,
 
     updateState = function(newState) {
+
       private$stateManager$updateState(newState)
 
       if(private$stateManager$isDeathState()) {
         private$triggerDeathPhase()
       }
+
+      private$mapManager$updateState(private$session)
 
       card <- self$popCard()
 

@@ -2,12 +2,15 @@ import("R6")
 import("googlesheets")
 import("tidyr")
 import("glue")
+import("utils")
 
 export("DataManager")
 
 DataManager <- R6Class("DataManager",
   private = list(
     data = NULL,
+
+    cities = NULL,
 
     options = NULL,
     gameSettings = NULL,
@@ -36,9 +39,15 @@ DataManager <- R6Class("DataManager",
       private$decks <- gs_read(data, ws = "Decks")
       private$options <- gs_read(data, ws = "Options")
 
+      private$cities <- data.frame(read.csv("./data/worldcities.csv"))
+
       lapply(private$cardTypes, function(type) {
         private$cards[[type]] <- gs_read(data, ws = type)
       })
+    },
+
+    getCities = function() {
+      return(private$cities)
     },
 
     getData = function() {
@@ -60,7 +69,7 @@ DataManager <- R6Class("DataManager",
     getDecks = function() {
       return(private$decks)
     },
-    
+
     getDeckOptions = function(name) {
       decks <- self$getDecks()
       return(decks[which(decks$`Deck Name` == name), ])

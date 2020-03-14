@@ -14,6 +14,11 @@ stateManager <- R6Class("stateManager",
       week = 0
     ),
 
+    markers = list(
+      trees = list(),
+      fires = list()
+    ),
+
     resetState = function() {
       isolate(self$updateState(list(
         karma = 50,
@@ -23,6 +28,11 @@ stateManager <- R6Class("stateManager",
 
         week = 1
       ), TRUE))
+
+      self$markers = list(
+        trees = list(),
+        fires = list()
+      )
     },
 
     isDeathState = function() {
@@ -36,6 +46,10 @@ stateManager <- R6Class("stateManager",
       }
     },
 
+    updateMarkers = function(newMarkers) {
+      self$markers <- newMarkers
+    },
+
     updateState = function(newState, force = FALSE) {
       lapply(names(newState), function(attribute) {
           self$state[[attribute]] <- ifelse (
@@ -44,6 +58,8 @@ stateManager <- R6Class("stateManager",
             self$state[[attribute]] + as.numeric(newState[[attribute]])
           )
       })
+
+      print(reactiveValuesToList(self$state))
     }
   )
 )
