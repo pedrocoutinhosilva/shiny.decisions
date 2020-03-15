@@ -204,3 +204,17 @@ html, body { height: 100%; width: 100%; overflow: hidden; }
 .marker-tree_small {
   z-index: 1 !important;
 }
+
+.karma-wrapper {
+  display: flex;
+}
+.karma-wrapper .positive{
+  width: 50%;
+  float: right;
+  padding-left: 4px;
+}
+.karma-wrapper .negative{
+  transform: rotate(180deg);
+  width: 50%;
+  float: left;
+}

@@ -6,7 +6,6 @@ import("shiny.blank")
 
 export("metricsManager")
 
-
 metricCard <- function(id, label, class, icon) {
   div(
     class = glue::glue("{class} metric-wrapper"),
@@ -24,14 +23,12 @@ ui <- function(id) {
   ns <- NS(id)
 
   gridPanel(
-    areas = c(
-      "metric-karma metric-wealth metric-opinion metric-enviroment"
-    ),
+    areas = c("metric-karma metric-wealth metric-opinion metric-enviroment"),
     class = "metrics",
 
     metricCard(
       ns("stateKarma"),
-      "Evil",
+      "Karma",
       "metric-karma",
       "assets/ui/icons/halo.png"
       ),
@@ -60,10 +57,22 @@ server <- function(input, output, session, state) {
   ns <- session$ns
 
   output$stateKarma <- renderUI(
-    progress(ns("stateKarma"), value = state$karma, type = "is-error")
+    div(
+      class = "karma-wrapper",
+      progress(
+        ns("stateKarmaNegative"),
+        value = ifelse(state$karma < 50, (50 - state$karma) * 2, 0),
+        type = "is-error negative"
+      ),
+      progress(
+        ns("stateKarmaPositive"),
+        value = ifelse(state$karma > 49, (state$karma - 50) * 2, 0),
+        type = "is-primary positive"
+      )
+    )
   )
   output$stateWealth <- renderUI(
-    progress(ns("stateWealth"), value = state$weath, type = "is-warning")
+    progress(ns("stateWealth"), value = state$wealth, type = "is-warning")
   )
   output$stateOpinion <- renderUI(
     progress(ns("stateOpinion"), value = state$opinion, type = "is-primary")
@@ -73,9 +82,8 @@ server <- function(input, output, session, state) {
   )
 }
 
-# data related to game state
+# Manages the UI displaying the state metrics.
 metricsManager <- R6Class("metricsManager",
-
   private = list(
     server = server
   ),
