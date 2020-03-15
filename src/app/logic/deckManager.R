@@ -70,7 +70,7 @@ deckManager <- R6Class("deckManager",
         prob = c(cardTemplate$`Max Intensity`:cardTemplate$`Min Intensity`),
         replace = TRUE
       )
-      intensityMultiplier <- 1 + ((intensityLevel - 1) / 10)
+      intensityMultiplier <- 1 + ((intensityLevel - 1) / 20)
 
       # Generate random options
       options <- vector("list", length(names(private$dataManager$getOptions())))
@@ -196,7 +196,7 @@ deckManager <- R6Class("deckManager",
       }
       newSize <- as.numeric(private$gameFlow[[private$currentDeck]]$`Deck Size`) - 1
       private$gameFlow[[private$currentDeck]]$`Deck Size` <- newSize
-      
+
       return(private$generateTemplateCard())
     },
 
