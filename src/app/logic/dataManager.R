@@ -2,18 +2,16 @@ import("R6")
 import("googlesheets")
 import("tidyr")
 import("glue")
-import("utils")
 
 export("DataManager")
 
+# Deals with external data
 DataManager <- R6Class("DataManager",
   private = list(
     data = NULL,
-
     cities = NULL,
-
     options = NULL,
-    gameSettings = NULL,
+    settings = NULL,
 
     cards = list(),
     decks = list(),
@@ -23,9 +21,9 @@ DataManager <- R6Class("DataManager",
 
   public = list(
     initialize = function(sheetId) {
+      # Will retry 10 times before giving up (In case of bad connection)
       for(i in 1:10){
         try({
-          # data <- gs_key(sheetId, visibility = "public", lookup = FALSE)
           data <- gs_url(
             glue::glue("https://docs.google.com/spreadsheets/d/{sheetId}"),
             visibility = "public",
@@ -35,11 +33,10 @@ DataManager <- R6Class("DataManager",
         })
       }
 
-      private$gameSettings <- gs_read(data, ws = "Game Settings")
-      private$decks <- gs_read(data, ws = "Decks")
-      private$options <- gs_read(data, ws = "Options")
-
-      private$cities <- data.frame(read.csv("./data/worldcities.csv"))
+      private$settings  <- gs_read(data, ws = "Game Settings")
+      private$decks     <- gs_read(data, ws = "Decks")
+      private$options   <- gs_read(data, ws = "Options")
+      private$cities    <- gs_read(data, ws = "Map Cities")
 
       lapply(private$cardTypes, function(type) {
         private$cards[[type]] <- gs_read(data, ws = type)
@@ -50,28 +47,16 @@ DataManager <- R6Class("DataManager",
       return(private$cities)
     },
 
-    getData = function() {
-      return(private$data)
-    },
-
-    getGameSettings = function(gameType) {
-      return(private$gameSettings[which(private$gameSettings$`Game Type` == gameType), ])
-    },
-
-    getCardTypes = function() {
-      return(private$cardTypes)
+    getSettings = function(gameType) {
+      return(private$settings[which(private$settings$`Game Type` == gameType), ])
     },
 
     getOptions = function(attribute) {
       return(drop_na(private$options[attribute]))
     },
 
-    getDecks = function() {
-      return(private$decks)
-    },
-
     getDeckOptions = function(name) {
-      decks <- self$getDecks()
+      decks <- private$decks
       return(decks[which(decks$`Deck Name` == name), ])
     },
 
