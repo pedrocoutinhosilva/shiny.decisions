@@ -141,7 +141,7 @@ html, body { height: 100%; width: 100%; overflow: hidden; }
   text-align: center;
   background-color: #212529;
   color: white;
-  padding: 20px;
+  padding: 30px;
 }
 
 #card_stack {
@@ -217,4 +217,21 @@ html, body { height: 100%; width: 100%; overflow: hidden; }
   transform: rotate(180deg);
   width: 50%;
   float: left;
+}
+
+.nes-progress.is-opinion::-webkit-progress-bar {
+    background-color: #fff
+}
+
+.nes-progress.is-opinion::-webkit-progress-value {
+    background-color: #6853A3
+}
+
+.nes-progress.is-opinion::-moz-progress-bar {
+    background-color: #6853A3
+}
+
+.nes-progress.is-opinion::-ms-fill {
+    background-color: #6853A3;
+    border: none
 }

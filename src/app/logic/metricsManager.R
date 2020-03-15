@@ -75,7 +75,7 @@ server <- function(input, output, session, state) {
     progress(ns("stateWealth"), value = state$wealth, type = "is-warning")
   )
   output$stateOpinion <- renderUI(
-    progress(ns("stateOpinion"), value = state$opinion, type = "is-primary")
+    progress(ns("stateOpinion"), value = state$opinion, type = "is-opinion")
   )
   output$stateEnviroment <- renderUI(
     progress(ns("stateEnviroment"), value = state$enviroment, type = "is-success")

@@ -126,6 +126,7 @@ gameManager <- R6Class("gameManager",
     init_server = function(session) {
       private$session <- session
 
+      private$session$sendCustomMessage("init_card_stack", TRUE)
       private$metricsManager$init_server("metrics", private$stateManager$state)
       private$mapManager$init_server("map")
     },

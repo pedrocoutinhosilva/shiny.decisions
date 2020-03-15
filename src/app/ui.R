@@ -3,7 +3,6 @@ blankPage(
   theme = "nes",
 
   tags$head(
-    tags$script(src = "scripts/hammer.min.js"),
     tags$link(rel = "stylesheet", type = "text/css", href = "styles/styles.css")
   ),
 

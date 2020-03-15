@@ -1,5 +1,4 @@
 class Carousel {
-
   constructor(element) {
     this.board = element
     this.handle()
@@ -97,7 +96,7 @@ class Carousel {
 
     Object.entries({
       karma: Number(carousel.topCard.getAttribute(`delta-${delta_direction}-karma`)),
-      wealth: Number(carousel.topCard.getAttribute(`delta-${delta_direction}-weath`)),
+      wealth: Number(carousel.topCard.getAttribute(`delta-${delta_direction}-wealth`)),
       opinion: Number(carousel.topCard.getAttribute(`delta-${delta_direction}-opinion`)),
       enviroment: Number(carousel.topCard.getAttribute(`delta-${delta_direction}-enviroment`))
     }).map(attribute => {
@@ -116,7 +115,8 @@ class Carousel {
     let scale = (95 + (5 * Math.abs(propX))) / 100
 
     this.topCard.style.transform =
-      'translateX(' + posX + 'px) translateY(' + posY + 'px) rotate(' + deg + 'deg) rotateY(0deg) scale(1)'
+      'translateX(calc(' + posX + 'px - 50%)) translateY(calc(' + posY + 'px - 50%)) rotate(' + deg + 'deg) rotateY(0deg) scale(1)'
+
 
     if (this.nextCard) this.nextCard.style.transform =
       'translateX(-50%) translateY(-50%) rotate(0deg) rotateY(0deg) scale(' + scale + ')'
@@ -154,14 +154,14 @@ class Carousel {
       if (successful) {
 
         this.topCard.style.transform =
-          'translateX(' + posX + 'px) translateY(' + posY + 'px) rotate(' + deg + 'deg)'
+          'translateX(calc(' + posX + 'px - 50%)) translateY(calc(' + posY + 'px - 50%)) rotate(' + deg + 'deg)'
 
         let delta = {}
 
         if(direction == 'LEFT') {
           delta = {
             karma: this.topCard.getAttribute('delta-left-karma'),
-            wealth: this.topCard.getAttribute('delta-left-weath'),
+            wealth: this.topCard.getAttribute('delta-left-wealth'),
             opinion: this.topCard.getAttribute('delta-left-opinion'),
             enviroment: this.topCard.getAttribute('delta-left-enviroment')
           }
@@ -170,26 +170,23 @@ class Carousel {
         if(direction == 'RIGHT') {
           delta = {
             karma: this.topCard.getAttribute('delta-right-karma'),
-            wealth: this.topCard.getAttribute('delta-right-weath'),
+            wealth: this.topCard.getAttribute('delta-right-wealth'),
             opinion: this.topCard.getAttribute('delta-right-opinion'),
             enviroment: this.topCard.getAttribute('delta-right-enviroment')
           }
         }
 
-        console.log(delta)
-
         setTimeout(() => {
           Shiny.setInputValue('update_state', {
             karma: delta.karma,
-            weath: delta.wealth,
+            wealth: delta.wealth,
             opinion: delta.opinion,
-            enviroment: delta.enviroment
+            enviroment: delta.enviroment,
+            week: 1
           }, {priority : 'event'})
 
           this.board.removeChild(this.topCard)
           this.handle()
-
-          console.log('card removed', direction, e.direction)
 
         }, 200)
 
@@ -207,8 +204,10 @@ class Carousel {
   }
 
   push({ background, message, delta }) {
-
     let card = document.createElement('div')
+
+    let card_color = document.createElement('div')
+    let card_image = document.createElement('div')
 
     let message_left = document.createElement('p')
     let message_right = document.createElement('p')
@@ -222,9 +221,10 @@ class Carousel {
     card.append(message_left)
     card.append(message_right)
 
-    card.classList.add('card')
+    card.append(card_image)
+    card.append(card_color)
 
-    console.log(message, delta)
+    card.classList.add('card')
 
     Object.entries({
       'message-task': message.task,
@@ -232,20 +232,30 @@ class Carousel {
       'message-right': message.right,
 
       'delta-left-karma': delta.left.karma,
-      'delta-left-weath': delta.left.weath,
+      'delta-left-wealth': delta.left.wealth,
       'delta-left-opinion': delta.left.opinion,
       'delta-left-enviroment': delta.left.enviroment,
 
       'delta-right-karma': delta.right.karma,
-      'delta-right-weath': delta.right.weath,
+      'delta-right-wealth': delta.right.wealth,
       'delta-right-opinion': delta.right.opinion,
       'delta-right-enviroment': delta.right.enviroment
     }).map(attribute => {
       card.setAttribute(attribute[0], attribute[1])
     })
 
-    card.style.backgroundImage =
-      `url(${background})`
+    card_image.classList.add('card-background', 'card-image')
+    card_color.classList.add('card-background', 'card-color')
+
+    card_color.style.background = `linear-gradient(
+      135deg,
+      ${background.color_left} 0%,
+      ${background.color_left} 50%,
+      ${background.color_right} 51%,
+      ${background.color_right} 100%)`
+
+    card_image.style.background =
+      `url(${background.image})`
 
     if (this.board.firstChild) {
       this.board.insertBefore(card, this.board.firstChild)
@@ -256,7 +266,20 @@ class Carousel {
   }
 }
 
+let carousel
+
+let init_card_stack = function(force) {
+  carousel = new Carousel(document.querySelector('#card_stack'))
+}
+Shiny.addCustomMessageHandler('init_card_stack', init_card_stack);
+
 let addCard = function(options) {
-  Object.values(options).map(card => carousel.push(card))
+  carousel.push(options)
   carousel.handle()
 }
+Shiny.addCustomMessageHandler('add_card', addCard);
+
+let gameOver = function(options) {
+  modal_gameOverScreen.classList.add('open')
+}
+Shiny.addCustomMessageHandler('game_over', gameOver);
