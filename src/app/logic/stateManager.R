@@ -52,11 +52,19 @@ stateManager <- R6Class("stateManager",
 
     updateState = function(newState, force = FALSE) {
       lapply(names(newState), function(attribute) {
+
           self$state[[attribute]] <- ifelse (
             force,
             newState[[attribute]],
             self$state[[attribute]] + as.numeric(newState[[attribute]])
           )
+
+          if(attribute != "week") {
+            if(self$state[[attribute]] < 0)
+              self$state[[attribute]] <- 0
+            if(self$state[[attribute]] > 100)
+              self$state[[attribute]] <- 100              
+          }
       })
 
       print(reactiveValuesToList(self$state))

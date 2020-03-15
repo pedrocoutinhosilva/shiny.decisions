@@ -28,7 +28,7 @@ ui <- function(id) {
   )
 }
 
-updateMarkers <- function(markers, required, icon, class_name, map, dataManager) {
+updateMarkers <- function(markers, required, name, map, dataManager) {
   if(is.null(markers)) markers = list()
 
   current <- ifelse(
@@ -54,9 +54,9 @@ updateMarkers <- function(markers, required, icon, class_name, map, dataManager)
     map <- map %>%
     addMarkers(data = markers, lng = ~lng, lat = ~lat,
     icon = list(
-      iconUrl = icon,
+      iconUrl = paste0("assets/map/", name, ".png"),
       iconSize = c(30, 30),
-      className = class_name
+      className = paste0("marker-", name)
      ))
   }
 
@@ -67,7 +67,20 @@ server <- function(input, output, session, stateManager, dataManager) {
   ns <- session$ns
 
   output$mainMap <- renderLeaflet({
-    leaflet(options = leafletOptions(preferCanvas = TRUE)) %>%
+    leaflet(
+      options = leafletOptions(
+        preferCanvas = TRUE,
+        zoomControl = FALSE,
+        dragging = FALSE,
+        minZoom = 2,
+        maxZoom = 2)
+      ) %>%
+      # setMaxBounds(
+      #   lng1 = 0,
+      #   lat1 = 0,
+      #   lng2 = 0,
+      #   lat2 = 0
+      # ) %>%
       addProviderTiles("Stamen.Watercolor",
         options = providerTileOptions(noWrap = TRUE)
       ) %>%
@@ -81,43 +94,47 @@ server <- function(input, output, session, stateManager, dataManager) {
     current <- reactiveValuesToList(stateManager$state)
     markers <- stateManager$markers
 
-    categories <- list(
-      cold = list(
-        requirement = floor(current$enviroment/30),
-        icon = "assets/map/cold.png"
-      ),
-      fires = list(
-        requirement = floor(current$enviroment/20),
-        icon = "assets/map/fire.png"
-      ),
-      money = list(
-        requirement = floor(current$weath/20),
-        icon = "assets/map/money.png"
-      ),
-      mad = list(
-        requirement = floor(current$opinion/20),
-        icon = "assets/map/mad.png"
-      ),
-      angry = list(
-        requirement = floor(current$opinion/40),
-        icon = "assets/map/mad.png"
-      ),
-      smile = list(
-        requirement = floor(current$opinion/5),
-        icon = "assets/map/smile.png"
-      ),
-      trees = list(
-        requirement = current$enviroment,
-        icon = "assets/map/tree.png"
-      )
+    base <- list(
+      enviroment = floor(current$enviroment/10),
+      weath = floor(current$weath/10),
+      opinion = floor(current$opinion/10)
     )
+
+    # Marker categories for stats indicators
+    categories <- list()
+    # Enviroment indicators
+    # Trees start at zero and grow with the current enviroment
+    categories$tree <- base$enviroment * 5
+    categories$tree_large <- base$enviroment
+    categories$tree_small <- base$enviroment * 2
+    # Fires appear at 40 enviroment an increase numbers as it gets lower
+    categories$fire <- ifelse(current$enviroment <= 40, (5 - base$enviroment), 0)
+    # Cold appear at 40 enviroment an increase numbers as it gets lower
+    categories$cold <- ifelse(current$enviroment <= 40, (5 - base$enviroment), 0)
+
+    # Wealth Indicators
+    # Broken houses start apearing at 50 wealth and increase numbers as it gets lower
+    categories$house_broken <- ifelse(current$weath <= 50, (6 - base$weath), 0)
+    # Mormal houses grow up to 50 wealth and start decreasing after that
+    if (current$weath >= 50) categories$house <- (11 - base$weath)
+    else categories$house <- base$weath
+    # Office buildings apearing at 50 wealth and increase numbers as it gets higher
+    categories$office <- ifelse( current$weath >= 50, (base$weath - 4), 0)
+
+    # Opinion Indicators
+    # Mad people start apearing at 50 opinion and increase numbers as it gets lower
+    categories$mad <- ifelse(current$opinion <= 50, (6 - base$opinion), 0)
+    # Smily people grow up to 50 opinion and start decreasing after that
+    if (current$opinion >= 50) categories$smile <- (11 - base$opinion)
+    else categories$smile <- base$weath
+    # Super happy people apearing at 50 opinion and increase numbers as it gets higher
+    categories$stareyes <- ifelse(current$opinion >= 50, (base$opinion - 4), 0)
 
     for(category in names(categories)) {
       stateManager$markers[[category]] <- updateMarkers(
         markers = markers[[category]],
-        required = categories[[category]]$requirement,
-        icon = categories[[category]]$icon,
-        class_name = paste0("marker-", category),
+        required = categories[[category]],
+        name = category,
         map = map,
         dataManager = dataManager
       )

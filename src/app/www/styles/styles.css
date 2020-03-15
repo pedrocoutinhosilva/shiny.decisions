@@ -199,6 +199,8 @@ html, body { height: 100%; width: 100%; overflow: hidden; }
   filter: drop-shadow(2px 2px 0 black) drop-shadow(-2px -2px 0 black);
 }
 
-.marker-trees {
+.marker-tree,
+.marker-tree_large,
+.marker-tree_small {
   z-index: 1 !important;
 }

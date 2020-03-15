@@ -143,7 +143,7 @@ gameManager <- R6Class("gameManager",
       self$startGame(private$gameType, TRUE)
     },
 
-    startGame = function(gameType, skipTutorial = FALSE) {
+    startGame = function(gameType, skipTutorial = TRUE) {
       private$resetState()
       private$stateManager$resetState()
       private$deckManager$resetState(gameType, skipTutorial, private$dataManager)
