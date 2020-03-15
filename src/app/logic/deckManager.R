@@ -18,6 +18,7 @@ deckManager <- R6Class("deckManager",
   private = list(
     gameSettings = NULL,
     dataManager = NULL,
+    stateManager = NULL,
 
     gameFlow = NULL,
     currentDeck = NULL,
@@ -25,6 +26,7 @@ deckManager <- R6Class("deckManager",
     generateTemplateCard = function() {
       deckOptions <- private$gameFlow[[private$currentDeck]]
 
+      # Get random card type
       cardType <- sample(
         strsplit(deckOptions$`Card Pool`, ", ")[[1]],
         size = 1,
@@ -32,28 +34,47 @@ deckManager <- R6Class("deckManager",
         replace = TRUE
       )
 
+      karma <- private$stateManager$state$karma
+
+      # roll aditional checks based on karma
+      # If karma is low, double roll for bad cards based on how low
+      if (karma < 50 && cardType != "Bad") {
+        save_roll <- sample( c(1:1000), size = 1)
+        # if the save roll fails, card type is automatically set to bad
+        if (save_roll < 100 - karma) {
+          cardType <- "Bad"
+        }
+      }
+      # If karma is high, double roll for good kards based on how high
+      if (karma > 50 && cardType == "Bad") {
+        grace_roll <- sample( c(1:1000), size = 1)
+        # if the grace roll passes, card type is automatically set to good
+        if (grace_roll < karma) {
+          cardType <- "Good"
+        }
+      }
+
       if (private$gameFlow[[private$currentDeck]]$`Order Fixed`) {
-        deckLimit <- nrow(private$dataManager$getCards()[[cardType]])
-        deckSize <- as.numeric(private$gameFlow[[private$currentDeck]]$`Deck Size`)
-
-        currentCardRow <- deckLimit - deckSize
-
-        cardTemplate <- private$dataManager$getCards()[[cardType]][currentCardRow, ]
+        deckLimit       <- nrow(private$dataManager$getCards()[[cardType]])
+        deckSize        <- as.numeric(private$gameFlow[[private$currentDeck]]$`Deck Size`)
+        currentCardRow  <- deckLimit - deckSize
+        cardTemplate    <- private$dataManager$getCards()[[cardType]][currentCardRow, ]
       } else {
         cardTemplate <- sample_n(private$dataManager$getCards()[[cardType]], 1)
       }
 
+      # Get random intensity level
       intensityLevel <- sample(
-        c(1:10),
+        c(cardTemplate$`Min Intensity`:cardTemplate$`Max Intensity`),
         size = 1,
-        prob = c(10:1),
+        prob = c(cardTemplate$`Max Intensity`:cardTemplate$`Min Intensity`),
         replace = TRUE
       )
+      intensityMultiplier <- 1 + ((intensityLevel - 1) / 10)
 
+      # Generate random options
       options <- vector("list", length(names(private$dataManager$getOptions())))
-
       names(options) <- names(private$dataManager$getOptions())
-
       for ( option in names(options)){
           options[option] <- sample_n(private$dataManager$getOptions(option), 1)
       }
@@ -100,16 +121,16 @@ deckManager <- R6Class("deckManager",
         ),
         delta = list(
           left = list(
-            karma = cardTemplate$`Left Karma`,
-            weath = cardTemplate$`Left Wealth`,
-            opinion = cardTemplate$`Left Opinion`,
-            enviroment = cardTemplate$`Left Enviroment`
+            karma = cardTemplate$`Left Karma` * intensityMultiplier,
+            wealth = cardTemplate$`Left Wealth` * intensityMultiplier,
+            opinion = cardTemplate$`Left Opinion` * intensityMultiplier,
+            enviroment = cardTemplate$`Left Enviroment` * intensityMultiplier
           ),
           right = list(
-            karma = cardTemplate$`Right Karma`,
-            weath = cardTemplate$`Right Wealth`,
-            opinion = cardTemplate$`Right Opinion`,
-            enviroment = cardTemplate$`Right Enviroment`
+            karma = cardTemplate$`Right Karma` * intensityMultiplier,
+            wealth = cardTemplate$`Right Wealth` * intensityMultiplier,
+            opinion = cardTemplate$`Right Opinion` * intensityMultiplier,
+            enviroment = cardTemplate$`Right Enviroment` * intensityMultiplier
           )
         )
       )
@@ -125,9 +146,14 @@ deckManager <- R6Class("deckManager",
       private$currentDeck = "Death"
     },
 
-    resetState = function(gameType = "Medium", skipTutorial = FALSE, dataManager) {
+    resetState = function(gameType = "Medium",
+                          skipTutorial = FALSE,
+                          dataManager,
+                          stateManager) {
       private$dataManager <- dataManager
-      private$gameSettings <- private$dataManager$getGameSettings(gameType)
+      private$stateManager <- stateManager
+
+      private$gameSettings <- private$dataManager$getSettings(gameType)
 
       private$gameFlow <- list()
       specialDecks <- strsplit(private$gameSettings$`Special Decks`, ", ")[[1]]
@@ -168,16 +194,17 @@ deckManager <- R6Class("deckManager",
 
         private$currentDeck <- private$gameFlow[[private$currentDeck]]$`Next Deck`
       }
-
       newSize <- as.numeric(private$gameFlow[[private$currentDeck]]$`Deck Size`) - 1
-
       private$gameFlow[[private$currentDeck]]$`Deck Size` <- newSize
-
+      
       return(private$generateTemplateCard())
     },
 
-    initialize = function(dataManager) {
-      self$resetState(dataManager = dataManager)
+    initialize = function(dataManager, stateManager) {
+      self$resetState(
+        dataManager = dataManager,
+        stateManager = stateManager
+      )
     }
   )
 )
