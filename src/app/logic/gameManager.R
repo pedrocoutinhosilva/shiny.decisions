@@ -95,34 +95,25 @@ gameManager <- R6Class("gameManager",
     metricsManager = NULL,
     dataManager = NULL,
 
+    session = NULL,
     gameType = "Medium",
 
-    session = NULL,
-
     resetState = function() {
-      private$stateManager <- stateManager$new()
-      private$metricsManager <- metricsManager$new()
-
       if (is.null(private$dataManager)) {
         private$dataManager <- dataManager$new(
           "1LwIPKAxbKvuGyMKktcTVuYZbTda0WMQxmNMhxqaQhGg"
         )
       }
-
-      private$mapManager <- mapManager$new(
-        private$stateManager,
-        private$dataManager
-      )
-
-      private$deckManager <- deckManager$new(private$dataManager)
+      private$stateManager <- stateManager$new()
+      private$metricsManager <- metricsManager$new()
+      private$mapManager <- mapManager$new(private$stateManager, private$dataManager)
+      private$deckManager <- deckManager$new(private$dataManager, private$stateManager)
 
       self$ui = list(
         gameStages = ui,
         metrics = private$metricsManager$ui,
         map = private$mapManager$ui
       )
-
-      self$gameState = private$stateManager$state
     },
 
     triggerDeathPhase = function() {
@@ -135,39 +126,33 @@ gameManager <- R6Class("gameManager",
     init_server = function(session) {
       private$session <- session
 
-      private$metricsManager$init_server("metrics", self$gameState)
+      private$metricsManager$init_server("metrics", private$stateManager$state)
       private$mapManager$init_server("map")
     },
 
-    resetGame = function() {
-      self$startGame(private$gameType, TRUE)
+    resetGame = function(gameType = private$gameType) {
+      self$startGame(gameType, TRUE)
     },
 
-    startGame = function(gameType, skipTutorial = TRUE) {
+    startGame = function(gameType, skipTutorial = FALSE) {
       private$resetState()
       private$stateManager$resetState()
-      private$deckManager$resetState(gameType, skipTutorial, private$dataManager)
-
+      private$deckManager$resetState(
+        gameType,
+        skipTutorial,
+        private$dataManager,
+        private$stateManager
+      )
       private$mapManager$updateState(private$session)
 
-      card <- self$popCard()
-
-      private$session$sendCustomMessage(
-        "add_card",
-        card
-      )
+      private$session$sendCustomMessage( "add_card", self$popCard())
     },
 
     popCard = function() {
       private$deckManager$popCard()
     },
 
-    endGame = function() {},
-
-    gameState = NULL,
-
     updateState = function(newState) {
-
       private$stateManager$updateState(newState)
 
       if(private$stateManager$isDeathState()) {
@@ -175,19 +160,12 @@ gameManager <- R6Class("gameManager",
       }
 
       private$mapManager$updateState(private$session)
-
       card <- self$popCard()
 
       if (!is.null(card) && card == "GAMEOVER") {
-        private$session$sendCustomMessage(
-          "game_over",
-          "thanks for playing"
-        )
+        private$session$sendCustomMessage( "game_over", "thanks for playing")
       } else {
-        private$session$sendCustomMessage(
-          "add_card",
-          card
-        )
+        private$session$sendCustomMessage( "add_card", card)
       }
     },
 
