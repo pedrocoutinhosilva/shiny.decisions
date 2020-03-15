@@ -99,6 +99,12 @@ server <- function(input, output, session, stateManager, dataManager) {
     categories$fire <- ifelse(current$enviroment <= 40, (5 - base$enviroment), 0)
     # Cold appear at 40 enviroment an increase numbers as it gets lower
     categories$cold <- ifelse(current$enviroment <= 40, (5 - base$enviroment), 0)
+    # Sick appear at 40 enviroment an increase numbers as it gets lower
+    categories$sick <- ifelse(current$enviroment <= 40, (5 - base$enviroment), 0)
+    # Tornados appear at 25 enviroment an increase numbers as it gets lower
+    categories$tornado <- ifelse(current$enviroment <= 25, (3 - base$enviroment), 0)
+    # Thunder appear at 25 enviroment an increase numbers as it gets lower
+    categories$thunder <- ifelse(current$enviroment <= 25, (3 - base$enviroment), 0)
 
     # Wealth Indicators
     # Broken houses start apearing at 50 wealth and increase numbers as it gets lower
