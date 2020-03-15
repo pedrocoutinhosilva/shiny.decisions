@@ -9,34 +9,26 @@ import("dplyr")
 
 export("mapManager")
 
-# continents <- readLines("data/continents.json") %>% paste(collapse = "\n")
-
 ui <- function(id) {
   ns <- NS(id)
 
-  script <- glue::glue("
-    let updateMapStyle = function(options) {
-      sepia = (100 - options.enviroment) / 100
-      $('#map-mainMap .leaflet-tile').css('filter', `sepia(${sepia})`)
-    }
-    Shiny.addCustomMessageHandler('updateMapStyle', updateMapStyle)
-  ", .open = "<<", .close = ">>")
-
   tagList(
-    tags$script(HTML(script)),
+    tags$script(src = "scripts/update_map_style.js"),
+    tags$style(id = "updateMapStyles"),
     leafletOutput(ns("mainMap"), height = "100%")
   )
 }
 
 updateMarkers <- function(markers, required, name, map, dataManager) {
+  # Current markers on the map
   if(is.null(markers)) markers = list()
-
   current <- ifelse(
     is.data.frame(markers),
     nrow(markers),
     0
   )
 
+  # Update marker list with new required side
   if(length(markers) == 0) {
     markers <- sample_n(dataManager$getCities(), required)[c("lat", "lng")]
   }
@@ -50,6 +42,7 @@ updateMarkers <- function(markers, required, name, map, dataManager) {
     )
   }
 
+  # Add new markers to the map
   if (length(markers) > 0 ) {
     map <- map %>%
     addMarkers(data = markers, lng = ~lng, lat = ~lat,
@@ -75,28 +68,23 @@ server <- function(input, output, session, stateManager, dataManager) {
         minZoom = 2,
         maxZoom = 2)
       ) %>%
-      # setMaxBounds(
-      #   lng1 = 0,
-      #   lat1 = 0,
-      #   lng2 = 0,
-      #   lat2 = 0
-      # ) %>%
       addProviderTiles("Stamen.Watercolor",
         options = providerTileOptions(noWrap = TRUE)
       ) %>%
-      # addGeoJSON(continents, weight = 1, color = "#444444", fill = FALSE) %>%
       setView(0, 0, 2)
   })
 
   observe({
     map <- leafletProxy("map-mainMap") %>%
       clearMarkers()
+
     current <- reactiveValuesToList(stateManager$state)
     markers <- stateManager$markers
 
+    # Base values for calculating necessary number of markers
     base <- list(
       enviroment = floor(current$enviroment/10),
-      weath = floor(current$weath/10),
+      wealth = floor(current$wealth/10),
       opinion = floor(current$opinion/10)
     )
 
@@ -114,22 +102,23 @@ server <- function(input, output, session, stateManager, dataManager) {
 
     # Wealth Indicators
     # Broken houses start apearing at 50 wealth and increase numbers as it gets lower
-    categories$house_broken <- ifelse(current$weath <= 50, (6 - base$weath), 0)
+    categories$house_broken <- ifelse(current$wealth <= 50, (6 - base$wealth), 0)
     # Mormal houses grow up to 50 wealth and start decreasing after that
-    if (current$weath >= 50) categories$house <- (11 - base$weath)
-    else categories$house <- base$weath
+    if (current$wealth >= 50) categories$house <- (11 - base$wealth)
+    else categories$house <- base$wealth
     # Office buildings apearing at 50 wealth and increase numbers as it gets higher
-    categories$office <- ifelse( current$weath >= 50, (base$weath - 4), 0)
+    categories$office <- ifelse( current$wealth >= 50, (base$wealth - 4), 0)
 
     # Opinion Indicators
     # Mad people start apearing at 50 opinion and increase numbers as it gets lower
     categories$mad <- ifelse(current$opinion <= 50, (6 - base$opinion), 0)
     # Smily people grow up to 50 opinion and start decreasing after that
     if (current$opinion >= 50) categories$smile <- (11 - base$opinion)
-    else categories$smile <- base$weath
+    else categories$smile <- base$wealth
     # Super happy people apearing at 50 opinion and increase numbers as it gets higher
     categories$stareyes <- ifelse(current$opinion >= 50, (base$opinion - 4), 0)
 
+    # Updates markers for all categories
     for(category in names(categories)) {
       stateManager$markers[[category]] <- updateMarkers(
         markers = markers[[category]],
@@ -143,7 +132,6 @@ server <- function(input, output, session, stateManager, dataManager) {
 }
 
 mapManager <- R6Class("mapManager",
-
   private = list(
     server = server,
     stateManager = NULL,
