@@ -9,6 +9,7 @@ blankPage(
   gameManager$ui$gameStages(),
 
   gridPanel(
+    id = "page-wrapper",
     rows = "100px 1fr",
     areas = c(
       "app-metrics app-metrics app-metrics",

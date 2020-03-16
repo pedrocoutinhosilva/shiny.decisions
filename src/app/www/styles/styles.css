@@ -235,3 +235,14 @@ html, body { height: 100%; width: 100%; overflow: hidden; }
     background-color: #6853A3;
     border: none
 }
+
+@media screen and (max-width: 992px) {
+  #page-wrapper {
+    grid-template-rows: 100px 1fr 2fr !important;
+    grid-template-columns: 1fr !important;
+    grid-template-areas:
+        'app-metrics'
+        'app-map'
+        'app-cards' !important;
+  }
+}
