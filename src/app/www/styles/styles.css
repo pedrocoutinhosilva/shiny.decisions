@@ -1,17 +1,16 @@
 html, body { height: 100%; width: 100%; overflow: hidden; }
 
 .metric-wrapper {
-  margin: 15px 15px 15px 15px;
   padding-left: 55px;
   position: relative;
 }
 
 .metric-wrapper progress {
-  width: calc(100% - 8px);
+  width: calc(100% - 20px);
 }
 
 .nes-progress {
-  height: 25px !important;
+  height: 20px !important;
   margin: 0 !important;
 }
 
@@ -65,7 +64,7 @@ html, body { height: 100%; width: 100%; overflow: hidden; }
 
 .metric-wrapper .metric-icon {
   position: absolute;
-  left: 0;
+  left: 7px;
   top: 0;
   bottom: 0;
   margin: auto;
@@ -78,15 +77,20 @@ html, body { height: 100%; width: 100%; overflow: hidden; }
 
 .app-metrics {
   color: #fff;
-  background-color: #212529;
+
   z-index: 3;
-  box-shadow: 0px 5px 10px 0px rgba(0,0,0,0.75);
+
+}
+
+.metric-wrapper {
+  background-color: #212529;
+  /* box-shadow: 0px 5px 10px 0px rgba(0,0,0,0.75); */
 }
 
 .app-cards {
   overflow: visible;
   z-index: 1;
-  box-shadow: -5px 0px 10px 0px rgba(0,0,0,0.75);
+  /* box-shadow: -5px 0px 10px 0px rgba(0,0,0,0.75); */
 }
 
 
@@ -105,7 +109,6 @@ html, body { height: 100%; width: 100%; overflow: hidden; }
   width: 100%;
   height: 100%;
   position: relative;
-  background-color: #212529;
   overflow: visible;
 }
 
@@ -134,7 +137,7 @@ html, body { height: 100%; width: 100%; overflow: hidden; }
 
 #card_stack_message{
   width: 100%;
-  height: 200px;
+  height: 150px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -142,15 +145,33 @@ html, body { height: 100%; width: 100%; overflow: hidden; }
   background-color: #212529;
   color: white;
   padding: 30px;
+  position: relative;
+}
+#card_stack_message:before {
+  content: "";
+  position: absolute;
+  left: -40px;
+  top: 0;
+  z-index: -1;
+  border-right: 40px solid #212529;
+  border-top: 150px solid transparent;
+}
+#card_stack_message:after {
+  content: "";
+  position: absolute;
+  right: -40px;
+  top: 0;
+  z-index: -1;
+  border-left: 40px solid #212529;
+  border-top: 150px solid transparent;
 }
 
 #card_stack {
   width: 100%;
-  height: calc(100% - 200px);
+  height: 100%;
   position: absolute;
   bottom: 0;
   overflow: hidden;
-  background-color: #212529;
   overflow: visible;
 }
 #card_stack .card {
@@ -161,7 +182,7 @@ html, body { height: 100%; width: 100%; overflow: hidden; }
   top: 50%;
   left: 50%;
   border-radius: 1%;
-  box-shadow: 0px 4px 4px 0px rgba(0,0,0,0.1);
+  filter: drop-shadow(25px 25px 25px black);
   background-color: white;
   transform: translateX(-50%) translateY(-50%) scale(0.95);
   background-position: center center;
@@ -236,13 +257,78 @@ html, body { height: 100%; width: 100%; overflow: hidden; }
     border: none
 }
 
-@media screen and (max-width: 992px) {
-  #page-wrapper {
-    grid-template-rows: 100px 1fr 2fr !important;
-    grid-template-columns: 1fr !important;
-    grid-template-areas:
-        'app-metrics'
-        'app-map'
-        'app-cards' !important;
-  }
+.app-map {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  z-index: -1;
+}
+
+.metric-wrapper:before {
+  content: "";
+  position: absolute;
+  left: -20px;
+  top: 0;
+  z-index: -1;
+  border-right: 20px solid #212529;
+  border-bottom: 80px solid transparent;
+}
+.metric-wrapper:after {
+  content: "";
+  position: absolute;
+  right: -20px;
+  z-index: -1;
+  top: 0;
+  border-left: 20px solid #212529;
+  border-bottom: 80px solid transparent;
+}
+
+.metric-wrapper label {
+  margin-top: 12px;
+  margin-bottom: 0;
+}
+
+.metric-karma {
+  z-index: 100;
+}
+.metric-karma .karma-bad,
+.metric-karma .karma-good {
+  background-position: center center;
+  background-repeat: no-repeat;
+  position: relative;
+
+}
+.metric-karma .karma-bad {
+  background-size: 34px;
+  background-position: 20px;
+}
+
+.karma-container {
+  background-color: #212529;
+}
+
+.karma-value {
+  width: calc(50vh - 100px);
+  transform: translate(29px, 0) rotate(-90deg);
+}
+.metric-karma .karma-good:before {
+  content: "";
+  position: absolute;
+  top: -20px;
+  z-index: -1;
+  border-left: 80px solid #212529;
+  border-top: 20px solid transparent;
+}
+.metric-karma .karma-bad:after {
+  content: "";
+  position: absolute;
+  bottom: -20px;
+  z-index: -1;
+  border-left: 80px solid #212529;
+  border-bottom: 20px solid transparent;
+}
+
+.modal-content,
+.ui-element-style {
+  filter: drop-shadow(5px 10px 15px black);
 }

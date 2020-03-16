@@ -24,7 +24,7 @@ class Carousel {
       this.hammer.on('tap', (e) => { this.onTap(e) })
       this.hammer.on('pan', (e) => { this.onPan(e) })
 
-      document.querySelector('#card_stack_wrapper p').textContent = this.topCard.getAttribute('message-task')
+      document.querySelector('#card_stack_message p').textContent = this.topCard.getAttribute('message-task')
 
     }
 

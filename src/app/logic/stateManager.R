@@ -7,7 +7,7 @@ export("stateManager")
 stateManager <- R6Class("stateManager",
   private = list(
     default_state = list(
-      karma = 50,
+      karma = 60,
       wealth = 50,
       opinion = 50,
       enviroment = 50,
@@ -17,7 +17,7 @@ stateManager <- R6Class("stateManager",
   public = list(
     # Metrics for game state
     state = reactiveValues(
-      karma = 0,
+      karma = 50,
       wealth = 0,
       opinion = 0,
       enviroment = 0,

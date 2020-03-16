@@ -111,7 +111,8 @@ gameManager <- R6Class("gameManager",
 
       self$ui = list(
         gameStages = ui,
-        metrics = private$metricsManager$ui,
+        metrics = private$metricsManager$metrics_ui,
+        karma = private$metricsManager$karma_ui,
         map = private$mapManager$ui
       )
     },

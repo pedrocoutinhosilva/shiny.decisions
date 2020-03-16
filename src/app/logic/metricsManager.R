@@ -8,7 +8,7 @@ export("metricsManager")
 
 metricCard <- function(id, label, class, icon) {
   div(
-    class = glue::glue("{class} metric-wrapper"),
+    class = glue::glue("{class} metric-wrapper ui-element-style"),
 
     div(
       class = "metric-icon",
@@ -19,19 +19,52 @@ metricCard <- function(id, label, class, icon) {
   )
 }
 
-ui <- function(id) {
+karma_ui <- function(id) {
   ns <- NS(id)
 
   gridPanel(
-    areas = c("metric-karma metric-wealth metric-opinion metric-enviroment"),
+    class = "metric-karma",
+    rows = "1fr 50vh 1fr",
+    columns = "80px",
+    areas = c(
+      "...",
+      "karma-container",
+      "..."
+    ),
+    gridPanel(
+      class = "karma-container",
+      rows = "50px 1fr 50px",
+      columns = "80px",
+      areas = c(
+        "karma-good",
+        "karma-value",
+        "karma-bad"
+      ),
+
+      div(
+        class = "karma-good",
+        style = "background-image: url('assets/ui/icons/halo.png')"
+      ),
+      div(
+        class = "karma-bad",
+        style = "background-image: url('assets/ui/icons/evil.png')"
+      ),
+      uiOutput(ns("stateKarma"), class = "karma-value")
+    )
+  )
+}
+
+metrics_ui <- function(id) {
+  ns <- NS(id)
+
+  gridPanel(
+    rows = "80px",
+    columns = "1fr 3fr 1fr 3fr 1fr 3fr 1fr",
+    areas = c(
+      "... metric-wealth ... metric-opinion ... metric-enviroment ..."
+    ),
     class = "metrics",
 
-    metricCard(
-      ns("stateKarma"),
-      "Karma",
-      "metric-karma",
-      "assets/ui/icons/halo.png"
-      ),
     metricCard(
       ns("stateWealth"),
       "Wealth",
@@ -42,13 +75,13 @@ ui <- function(id) {
       ns("stateOpinion"),
       "Opinion",
       "metric-opinion",
-      "assets/ui/icons/friend.png"
+      "assets/map/smile.png"
       ),
     metricCard(
       ns("stateEnviroment"),
       "Enviroment",
       "metric-enviroment",
-      "assets/ui/icons/salad.png"
+      "assets/map/tree.png"
     )
   )
 }
@@ -89,7 +122,8 @@ metricsManager <- R6Class("metricsManager",
   ),
 
   public = list(
-    ui = ui,
+    karma_ui = karma_ui,
+    metrics_ui = metrics_ui,
     init_server = function(id, state) {
       callModule(private$server, id, state)
     }

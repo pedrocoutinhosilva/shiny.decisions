@@ -8,12 +8,18 @@ blankPage(
 
   gameManager$ui$gameStages(),
 
+  div(
+    class = "app-map",
+    gameManager$ui$map("map")
+  ),
   gridPanel(
     id = "page-wrapper",
-    rows = "100px 1fr",
+    rows = "100px 1fr 150px",
+    columns = "80px 1fr 1fr 2fr 1fr 1fr 80px",
     areas = c(
-      "app-metrics app-metrics app-metrics",
-      "app-map app-map app-cards"
+      "app-metrics  app-metrics app-metrics app-metrics app-metrics app-metrics app-metrics",
+      "app-karma    ...         ...         ...         app-cards   app-cards   app-cards",
+      "...          ...         app-task    app-task    app-task    ...         ..."
     ),
 
     gridPanel(
@@ -22,13 +28,19 @@ blankPage(
     ),
 
     gridPanel(
+      class = "app-karma ui-element-style",
+      gameManager$ui$karma("metrics")
+    ),
+
+    gridPanel(
       class = "app-cards",
       swipeCards$swipeCardStack()
     ),
 
-    gridPanel(
-      class = "app-map",
-      gameManager$ui$map("map")
+    div(
+      id = "card_stack_message",
+      class = "app-task ui-element-style",
+      p(class = "message-content")
     )
   )
 )
