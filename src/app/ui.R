@@ -14,11 +14,12 @@ blankPage(
   ),
   gridPanel(
     id = "page-wrapper",
-    rows = "100px 1fr 150px",
+    rows = "100px 1fr 50px 150px",
     columns = "80px 1fr 1fr 2fr 1fr 1fr 80px",
     areas = c(
       "app-metrics  app-metrics app-metrics app-metrics app-metrics app-metrics app-metrics",
       "app-karma    ...         ...         ...         app-cards   app-cards   app-cards",
+      "app-karma    ...         ...         app-week    app-cards   app-cards   app-cards",
       "...          ...         app-task    app-task    app-task    ...         ..."
     ),
 
@@ -35,6 +36,12 @@ blankPage(
     gridPanel(
       class = "app-cards",
       swipeCards$swipeCardStack()
+    ),
+
+    div(
+      id = "app_week",
+      class = "app-week",
+      p(class = "week-content")
     ),
 
     div(

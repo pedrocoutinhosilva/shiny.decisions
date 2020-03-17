@@ -117,6 +117,21 @@ deckManager <- R6Class("deckManager",
           right = do.call(
             glue::glue,
             modifyList(list(options$`Help Message`), options)
+          ),
+          week = switch(
+            cardType,
+            "Tutorial" = list(
+              text = "Tutorial",
+              increment = 0
+            ),
+            "Death" = list(
+              text = "Afterlife",
+              increment = 0
+            ),
+            list(
+              text = paste0("Week ", private$stateManager$state$week),
+              increment = 1
+            )
           )
         ),
         delta = list(

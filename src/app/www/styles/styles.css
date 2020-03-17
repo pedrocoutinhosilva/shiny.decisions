@@ -256,6 +256,38 @@ html, body { height: 100%; width: 100%; overflow: hidden; }
     background-color: #6853A3;
     border: none
 }
+.nes-progress.is-wealth::-webkit-progress-bar {
+    background-color: #fff
+}
+
+.nes-progress.is-wealth::-webkit-progress-value {
+    background-color: #e48e22
+}
+
+.nes-progress.is-wealth::-moz-progress-bar {
+    background-color: #e48e22
+}
+
+.nes-progress.is-wealth::-ms-fill {
+    background-color: #e48e22;
+    border: none
+}
+.nes-progress.is-enviroment::-webkit-progress-bar {
+    background-color: #fff
+}
+
+.nes-progress.is-enviroment::-webkit-progress-value {
+    background-color: #6cab22
+}
+
+.nes-progress.is-enviroment::-moz-progress-bar {
+    background-color: #6cab22
+}
+
+.nes-progress.is-enviroment::-ms-fill {
+    background-color: #6cab22;
+    border: none
+}
 
 .app-map {
   position: absolute;
@@ -331,4 +363,12 @@ html, body { height: 100%; width: 100%; overflow: hidden; }
 .modal-content,
 .ui-element-style {
   filter: drop-shadow(5px 10px 15px black);
+}
+
+.week-content {
+  text-align: center;
+  font-size: 28px;
+  filter: drop-shadow(5px 10px 15px black);
+  -webkit-text-stroke-width: 2px;
+  -webkit-text-stroke-color: #ffffff33;
 }

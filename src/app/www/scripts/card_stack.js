@@ -25,6 +25,7 @@ class Carousel {
       this.hammer.on('pan', (e) => { this.onPan(e) })
 
       document.querySelector('#card_stack_message p').textContent = this.topCard.getAttribute('message-task')
+      document.querySelector('#app_week p').textContent = this.topCard.getAttribute('week-text')
 
     }
 
@@ -182,7 +183,7 @@ class Carousel {
             wealth: delta.wealth,
             opinion: delta.opinion,
             enviroment: delta.enviroment,
-            week: 1
+            week: this.topCard.getAttribute('week-increment')
           }, {priority : 'event'})
 
           this.board.removeChild(this.topCard)
@@ -230,6 +231,9 @@ class Carousel {
       'message-task': message.task,
       'message-left': message.left,
       'message-right': message.right,
+
+      'week-text': message.week.text,
+      'week-increment': message.week.increment,
 
       'delta-left-karma': delta.left.karma,
       'delta-left-wealth': delta.left.wealth,
