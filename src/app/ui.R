@@ -3,6 +3,7 @@ blankPage(
   theme = "nes",
 
   tags$head(
+    tags$link(rel="shortcut icon", href="assets/map/tree.png"),
     tags$link(rel = "stylesheet", type = "text/css", href = "styles/styles.css")
   ),
 

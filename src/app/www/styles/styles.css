@@ -190,8 +190,6 @@ html, body { height: 100%; width: 100%; overflow: hidden; }
 }
 
 .entry-screen {
-  min-height: 50vh !important;
-
   text-align: center;
   justify-content: center;
   align-items: center;

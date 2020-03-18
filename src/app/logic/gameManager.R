@@ -67,7 +67,7 @@ ui <- function() {
 
         div(
           class = "intro",
-          "Game over"
+          "Game over",
           p(id = "game_over_message", "Game over")
         ),
         div(
