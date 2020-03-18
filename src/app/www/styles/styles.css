@@ -207,10 +207,9 @@ html, body { height: 100%; width: 100%; overflow: hidden; }
 
 .card-image {
   z-index: 2;
-
-  background-size: 80% 80% !important;
+  background-size: 90% 90% !important;
   background-repeat: no-repeat !important;
-  background-position: bottom center !important;
+  background-position: 50% 220% !important;
 }
 .card-color {
   z-index: 1;

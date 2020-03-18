@@ -99,6 +99,45 @@ deckManager <- R6Class("deckManager",
         glue::glue("{cardTemplate$`Image`}.png")
       )
 
+      # Fills in any potential glue string options
+      options <- as.list(sapply(names(options), function(option) {
+          do.call(glue::glue, modifyList(list(cleanCardMessage(options[[option]])), options))
+      }, USE.NAMES = TRUE))
+
+      left_values = list(
+        message = do.call(
+          glue::glue,
+          modifyList(list(cleanCardMessage(cardTemplate$`Left Message`)), options)
+        ),
+        delta = list(
+          karma = cardTemplate$`Left Karma` * intensityMultiplier,
+          wealth = cardTemplate$`Left Wealth` * intensityMultiplier,
+          opinion = cardTemplate$`Left Opinion` * intensityMultiplier,
+          enviroment = cardTemplate$`Left Enviroment` * intensityMultiplier
+        )
+      )
+      right_values = list(
+        message = do.call(
+          glue::glue,
+          modifyList(list(cleanCardMessage(cardTemplate$`Right Message`)), options)
+        ),
+        delta = list(
+          karma = cardTemplate$`Right Karma` * intensityMultiplier,
+          wealth = cardTemplate$`Right Wealth` * intensityMultiplier,
+          opinion = cardTemplate$`Right Opinion` * intensityMultiplier,
+          enviroment = cardTemplate$`Right Enviroment` * intensityMultiplier
+        )
+      )
+
+      # To spice things up, randomly switches left and right values half of the time
+      if (!(cardType %in% c("Tutorial", "Death"))) {
+        if(sample( c(TRUE, FALSE), size = 1)) {
+          temp <- left_values
+          left_values <- right_values
+          right_values <- temp
+        }
+      }
+
       card <- list(
         background = list(
           image = glue::glue("assets/cards/{background_image}"),
@@ -110,14 +149,8 @@ deckManager <- R6Class("deckManager",
             glue::glue,
             modifyList(list(cleanCardMessage(cardTemplate$`Template`)), options)
           ),
-          left = do.call(
-            glue::glue,
-            modifyList(list(options$`Ignore Message`), options)
-          ),
-          right = do.call(
-            glue::glue,
-            modifyList(list(options$`Help Message`), options)
-          ),
+          left = left_values$message,
+          right = right_values$message,
           week = switch(
             cardType,
             "Tutorial" = list(
@@ -135,18 +168,8 @@ deckManager <- R6Class("deckManager",
           )
         ),
         delta = list(
-          left = list(
-            karma = cardTemplate$`Left Karma` * intensityMultiplier,
-            wealth = cardTemplate$`Left Wealth` * intensityMultiplier,
-            opinion = cardTemplate$`Left Opinion` * intensityMultiplier,
-            enviroment = cardTemplate$`Left Enviroment` * intensityMultiplier
-          ),
-          right = list(
-            karma = cardTemplate$`Right Karma` * intensityMultiplier,
-            wealth = cardTemplate$`Right Wealth` * intensityMultiplier,
-            opinion = cardTemplate$`Right Opinion` * intensityMultiplier,
-            enviroment = cardTemplate$`Right Enviroment` * intensityMultiplier
-          )
+          left = left_values$delta,
+          right = right_values$delta
         )
       )
 

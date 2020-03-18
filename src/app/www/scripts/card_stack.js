@@ -281,9 +281,13 @@ let addCard = function(options) {
   carousel.push(options)
   carousel.handle()
 }
-Shiny.addCustomMessageHandler('add_card', addCard);
+Shiny.addCustomMessageHandler('add_card', addCard)
 
-let gameOver = function(options) {
+let gameOver = function(message) {
   modal_gameOverScreen.classList.add('open')
+
+  console.log(document.getElementById('game_over_message'))
+
+  document.getElementById('game_over_message').innerHTML = message
 }
-Shiny.addCustomMessageHandler('game_over', gameOver);
+Shiny.addCustomMessageHandler('game_over', gameOver)

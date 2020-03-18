@@ -49,7 +49,8 @@ ui <- function() {
 
         div(
           class = "intro",
-          "Welcome to shiny decisions! A game about making the best of bad situations"
+          p("Welcome to shiny decisions! A game about making the best of bad situations"),
+          p("Try your best to lead your world in hard times and see how long you can keep it up!")
         ),
         game_buttons()
       ),
@@ -67,6 +68,7 @@ ui <- function() {
         div(
           class = "intro",
           "Game over"
+          p(id = "game_over_message", "Game over")
         ),
         div(
           class = "navigation",
@@ -136,7 +138,7 @@ gameManager <- R6Class("gameManager",
       self$startGame(gameType, TRUE)
     },
 
-    startGame = function(gameType, skipTutorial = FALSE) {
+    startGame = function(gameType, skipTutorial = TRUE) {
       private$resetState()
       private$stateManager$resetState()
       private$deckManager$resetState(
@@ -165,9 +167,15 @@ gameManager <- R6Class("gameManager",
       card <- self$popCard()
 
       if (!is.null(card) && card == "GAMEOVER") {
-        private$session$sendCustomMessage( "game_over", "thanks for playing")
+        private$session$sendCustomMessage(
+          "game_over",
+          glue::glue("
+            You survived for {private$stateManager$state$week} weeks!
+            Would you like to go again?
+          ")
+        )
       } else {
-        private$session$sendCustomMessage( "add_card", card)
+        private$session$sendCustomMessage("add_card", card)
       }
     },
 
