@@ -63,14 +63,20 @@ deckManager <- R6Class("deckManager",
         cardTemplate <- sample_n(private$dataManager$getCards()[[cardType]], 1)
       }
 
+      state_min_intensity <- max(deckOptions$`Min Intensity`, cardTemplate$`Min Intensity`)
+      state_max_intensity <- min(deckOptions$`Max Intensity`, cardTemplate$`Max Intensity`)
+
+      if(state_min_intensity == state_max_intensity)
+        state_max_intensity <- state_max_intensity + 1
+        
       # Get random intensity level
-      intensityLevel <- sample(
-        c(cardTemplate$`Min Intensity`:cardTemplate$`Max Intensity`),
+      intensity_level <- sample(
+        c(state_min_intensity:state_max_intensity),
         size = 1,
-        prob = c(cardTemplate$`Max Intensity`:cardTemplate$`Min Intensity`),
+        prob = c(state_max_intensity:state_min_intensity),
         replace = TRUE
       )
-      intensityMultiplier <- 1 + ((intensityLevel - 1) / 20)
+      intensityMultiplier <- 1 + ((intensity_level - 1) / 20)
 
       # Generate random options
       options <- vector("list", length(names(private$dataManager$getOptions())))
@@ -80,8 +86,8 @@ deckManager <- R6Class("deckManager",
       }
 
       options <- modifyList(options, list(
-        `Danger Level` = private$dataManager$getOptions("Danger Level")[intensityLevel, ],
-        `Prosperity Level` = private$dataManager$getOptions("Prosperity Level")[intensityLevel, ]
+        `Danger Level` = private$dataManager$getOptions("Danger Level")[intensity_level, ],
+        `Prosperity Level` = private$dataManager$getOptions("Prosperity Level")[intensity_level, ]
       ))
 
       color_scale <- private$dataManager$getOptions(
@@ -89,8 +95,8 @@ deckManager <- R6Class("deckManager",
       )
 
       background_colors <- list(
-        left = as.character(color_scale[((intensityLevel * 2) - 1), ]),
-        right = as.character(color_scale[(intensityLevel * 2), ])
+        left = as.character(color_scale[((intensity_level * 2) - 1), ]),
+        right = as.character(color_scale[(intensity_level * 2), ])
       )
 
       background_image <- ifelse (
