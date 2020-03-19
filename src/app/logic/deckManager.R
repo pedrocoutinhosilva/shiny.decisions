@@ -23,36 +23,47 @@ deckManager <- R6Class("deckManager",
     gameFlow = NULL,
     currentDeck = NULL,
 
-    generateTemplateCard = function() {
-      deckOptions <- private$gameFlow[[private$currentDeck]]
+    getCardType = function(pool, prob, saving_grace) {
 
       # Get random card type
       cardType <- sample(
-        strsplit(deckOptions$`Card Pool`, ", ")[[1]],
+        pool,
         size = 1,
-        prob = strsplit(deckOptions$`Pool Weight`, ", ")[[1]],
+        prob = prob,
         replace = TRUE
       )
 
-      karma <- private$stateManager$state$karma
+      if (!(cardType %in% c("Tutorial", "Death"))) {
+        # roll aditional checks based on karma
+        # If karma is low, double roll for bad cards based on how low
+        if (saving_grace < 50 && cardType != "Bad") {
+          save_roll <- sample( c(1:1000), size = 1)
+          # if the save roll fails, card type is automatically set to bad
+          if (save_roll < 100 - saving_grace) {
+            cardType <- "Bad"
+          }
+        }
+        # If karma is high, double roll for good kards based on how high
+        if (saving_grace > 50 && cardType == "Bad") {
+          grace_roll <- sample( c(1:1000), size = 1)
+          # if the grace roll passes, card type is automatically set to good
+          if (grace_roll < saving_grace) {
+            cardType <- "Good"
+          }
+        }
+      }
 
-      # roll aditional checks based on karma
-      # If karma is low, double roll for bad cards based on how low
-      if (karma < 50 && cardType != "Bad") {
-        save_roll <- sample( c(1:1000), size = 1)
-        # if the save roll fails, card type is automatically set to bad
-        if (save_roll < 100 - karma) {
-          cardType <- "Bad"
-        }
-      }
-      # If karma is high, double roll for good kards based on how high
-      if (karma > 50 && cardType == "Bad") {
-        grace_roll <- sample( c(1:1000), size = 1)
-        # if the grace roll passes, card type is automatically set to good
-        if (grace_roll < karma) {
-          cardType <- "Good"
-        }
-      }
+      return(cardType)
+    },
+
+    generateTemplateCard = function() {
+      deckOptions <- private$gameFlow[[private$currentDeck]]
+
+      cardType <- private$getCardType(
+        strsplit(deckOptions$`Card Pool`, ", ")[[1]],
+        strsplit(deckOptions$`Pool Weight`, ", ")[[1]],
+        private$stateManager$state$karma
+      )
 
       if (private$gameFlow[[private$currentDeck]]$`Order Fixed`) {
         deckLimit       <- nrow(private$dataManager$getCards()[[cardType]])
@@ -68,7 +79,7 @@ deckManager <- R6Class("deckManager",
 
       if(state_min_intensity == state_max_intensity)
         state_max_intensity <- state_max_intensity + 1
-        
+
       # Get random intensity level
       intensity_level <- sample(
         c(state_min_intensity:state_max_intensity),

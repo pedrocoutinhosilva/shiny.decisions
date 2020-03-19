@@ -9,6 +9,15 @@ html, body { height: 100%; width: 100%; overflow: hidden; }
   width: calc(100% - 20px);
 }
 
+.modal-content {
+  height: 50vh;
+}
+
+#gameOverScreen .title,
+#gameOverScreen #game_over_message {
+  font-size: 300%;
+}
+
 .nes-progress {
   height: 20px !important;
   margin: 0 !important;

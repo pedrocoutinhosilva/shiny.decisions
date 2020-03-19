@@ -50,7 +50,7 @@ ui <- function() {
         div(
           class = "intro",
           p("Welcome to shiny decisions! A game about making the best of bad situations"),
-          p("Try your best to lead your world in hard times and see how long you can keep it up!")
+          p("Try your best to lead your world in good (and hard) times and see how long you can keep it up!")
         ),
         game_buttons()
       ),
@@ -68,8 +68,10 @@ ui <- function() {
 
         div(
           class = "intro",
-          "Game over",
-          p(id = "game_over_message", "Game over")
+          p(class = "title", "Game over"),
+          p("You survived for:"),
+          p(id = "game_over_message", "Week"),
+          p("Would you like to go again?")
         ),
         div(
           class = "navigation",
@@ -170,10 +172,7 @@ gameManager <- R6Class("gameManager",
       if (!is.null(card) && card == "GAMEOVER") {
         private$session$sendCustomMessage(
           "game_over",
-          glue::glue("
-            You survived for {private$stateManager$state$week} weeks!
-            Would you like to go again?
-          ")
+          private$stateManager$state$week
         )
       } else {
         private$session$sendCustomMessage("add_card", card)
