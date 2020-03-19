@@ -21,25 +21,34 @@ DataManager <- R6Class("DataManager",
 
   public = list(
     initialize = function(sheetId) {
-      # Will retry 10 times before giving up (In case of bad connection)
-      for(i in 1:10){
-        try({
-          data <- gs_url(
-            glue::glue("https://docs.google.com/spreadsheets/d/{sheetId}"),
-            visibility = "public",
-            lookup = FALSE
-          )
-          break
-        })
+
+      online_metadata <- googlesheets::gs_url(
+          glue::glue("https://docs.google.com/spreadsheets/d/{sheetId}"),
+          visibility = "public",
+          lookup = FALSE
+      )
+
+      if (file.exists("data/sheet_info.json") && file.exists("data/options.xlsx")) {
+        cached_version <- jsonlite::read_json("data/sheet_info.json")$updated[[1]]
+        online_version <- online_metadata$updated
+        is_up_to_date <- as.POSIXct(online_version) %in% c(as.POSIXct(cached_version))
+      } else (
+        is_up_to_date <- FALSE
+      )
+
+      if (!is_up_to_date) {
+        print("Updating from online data")
+        gs_download(online_metadata, to = "data/options.xlsx", overwrite = TRUE)
+        jsonlite::write_json(online_metadata, "data/sheet_info.json")
       }
 
-      private$settings  <- gs_read(data, ws = "Game Settings")
-      private$decks     <- gs_read(data, ws = "Decks")
-      private$options   <- gs_read(data, ws = "Options")
-      private$cities    <- gs_read(data, ws = "Map Cities")
+      private$settings  <- readxl::read_xlsx("data/options.xlsx", "Game Settings")
+      private$decks     <- readxl::read_xlsx("data/options.xlsx", "Decks")
+      private$options   <- readxl::read_xlsx("data/options.xlsx", "Options")
+      private$cities    <- readxl::read_xlsx("data/options.xlsx", "Map Cities")
 
       lapply(private$cardTypes, function(type) {
-        private$cards[[type]] <- gs_read(data, ws = type)
+        private$cards[[type]] <- readxl::read_xlsx("data/options.xlsx", sheet = type)
       })
     },
 
