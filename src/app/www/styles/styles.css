@@ -118,14 +118,15 @@ html, body { height: 100%; width: 100%; overflow: hidden; }
   padding: 5px;
   position: absolute;
   z-index: 4;
-  left: 5px;
-  right: 5px;
+  left: 8px;
+  right: 8px;
+  top: 8px;
   color: black;
 }
 
 #card_stack .message-right {
   text-align: right;
-  right: 0;
+  right: 8px;
 }
 
 #card_stack .dragging-left .message-left,
@@ -175,7 +176,7 @@ html, body { height: 100%; width: 100%; overflow: hidden; }
   overflow: visible;
 }
 #card_stack .card {
-  border: 2px solid white;
+  border: 3px solid #212529;
   width: 320px;
   height: 320px;
   position: absolute;
@@ -187,6 +188,7 @@ html, body { height: 100%; width: 100%; overflow: hidden; }
   transform: translateX(-50%) translateY(-50%) scale(0.95);
   background-position: center center;
   background-repeat: no-repeat;
+  font-size: 85%;
 }
 
 .entry-screen {
@@ -208,9 +210,11 @@ html, body { height: 100%; width: 100%; overflow: hidden; }
   background-size: 90% 90% !important;
   background-repeat: no-repeat !important;
   background-position: 50% 220% !important;
+  filter: drop-shadow(7px 1px 0px #3b3c3e);
 }
 .card-color {
   z-index: 1;
+  filter: blur(10px);
 }
 
 .leaflet-marker-icon {

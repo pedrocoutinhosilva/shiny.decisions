@@ -254,8 +254,8 @@ class Carousel {
     card_color.style.background = `linear-gradient(
       135deg,
       ${background.color_left} 0%,
-      ${background.color_left} 50%,
-      ${background.color_right} 51%,
+      ${background.color_left} 35%,
+      ${background.color_right} 65%,
       ${background.color_right} 100%)`
 
     card_image.style.background =

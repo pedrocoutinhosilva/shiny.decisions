@@ -62,8 +62,9 @@ ui <- function() {
     modal(
       "gameOverScreen",
       content = gridPanel(
-
+        rows = "1fr 50px",
         areas = c("intro", "navigation"),
+        class = "entry-screen",
 
         div(
           class = "intro",
