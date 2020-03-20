@@ -1,24 +1,25 @@
 function(input, output, session) {
 
-  gameManager$init_server(session)
+  session$userData$gameManager <- use("logic/gameManager.R")$gameManager$new()
+  session$userData$gameManager$init_server(session)
 
   observeEvent(input$update_state, {
-    gameManager$updateState(input$update_state)
+    session$userData$gameManager$updateState(input$update_state)
   })
 
   observeEvent(input$startGame, {
-    gameManager$startGame()
+    session$userData$gameManager$startGame()
   })
   observeEvent(input$startGameEasy, {
-    gameManager$startGame("Easy")
+    session$userData$gameManager$startGame("Easy")
   })
   observeEvent(input$startGameMedium, {
-    gameManager$startGame("Medium")
+    session$userData$gameManager$startGame("Medium")
   })
   observeEvent(input$startGameHard, {
-    gameManager$startGame("Hard")
+    session$userData$gameManager$startGame("Hard")
   })
   observeEvent(input$restartGame, {
-    gameManager$resetGame()
+    session$userData$gameManager$resetGame()
   })
 }
