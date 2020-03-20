@@ -137,7 +137,7 @@ body {
   color: black;
 }
 
-#card_stack .message-right {
+#card_stack .message-left {
   text-align: right;
   right: 8px;
 }
@@ -396,24 +396,43 @@ body {
 
 @media (orientation: portrait) {
   .app-map {
-    height: 50vh !important;
+    height: 40vh !important;
+    bottom: 10%;
   }
 
   .card {
     font-size: 140% !important;
   }
 
+  #card_stack_message {
+    font-size: 140% !important;
+    height: 90% !important;
+    background-color: transparent;
+  }
+  #card_stack_message:after,
+  #card_stack_message:before {
+    display: none !important;
+  }
+
   .week-content {
     color: white;
+    line-height: 80px;
+  }
+
+  .entry-screen {
+    grid-template-rows: 1fr 100px !important;
+    font-size: 140% !important;
   }
 
   #page-wrapper {
     grid-template-areas:
       'app-metrics  app-metrics  app-metrics'
+      '...          app-week     ...'
+      'app-karma    app-task     ...'
+      'app-karma    app-task     ...'
       'app-karma    app-cards    ...'
-      'app-karma    app-week    ...'
-      '...          app-task     ...' !important;
-    grid-template-rows: 100px 1fr 50px 150px !important;
+      'app-karma    ...          ...' !important;
+    grid-template-rows: 80px 80px 20% 50px 1fr 20% !important;
     grid-template-columns: 80px 1fr 80px !important;
   }
 }
