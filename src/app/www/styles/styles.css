@@ -190,8 +190,6 @@ body {
 }
 #card_stack .card {
   border: 3px solid #212529;
-  width: 320px;
-  height: 320px;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -201,7 +199,11 @@ body {
   transform: translateX(-50%) translateY(-50%) scale(0.95);
   background-position: center center;
   background-repeat: no-repeat;
-  font-size: 85%;
+  width: 30vh;
+  height: 30vh;
+  max-width: 70vw;
+  max-height: 70vw;
+  font-size: 1rem;
 }
 
 .entry-screen {
@@ -392,25 +394,13 @@ body {
   background-size: contain;
 }
 
-@media screen AND (min-width: 900px) {
-  #card_stack .card {
-    width: 30vh !important;
-    height: 30vh !important;
-
-    font-size: 140%;
-  }
-}
-
-@media (min-width: 900px) AND (orientation: portrait) {
+@media (orientation: portrait) {
   .app-map {
     height: 50vh !important;
   }
 
-  #card_stack .card {
-    max-width: 70vw !important;
-    max-height: 70vw !important;
-
-    font-size: 140%;
+  .card {
+    font-size: 140% !important;
   }
 
   .week-content {

@@ -72,7 +72,7 @@ server <- function(input, output, session, stateManager, dataManager) {
       addProviderTiles("Stamen.Watercolor",
         options = providerTileOptions(noWrap = TRUE)
       ) %>%
-      setView(90, 0, 2)
+      setView(0, 0, 2)
   })
 
   observe({
