@@ -17,12 +17,12 @@ blankPage(
   gridPanel(
     id = "page-wrapper",
     rows = "100px 1fr 50px 150px",
-    columns = "80px 1fr 1fr 2fr 1fr 1fr 80px",
+    columns = "80px 1fr 1fr 1fr 1fr 1fr 1fr 80px",
     areas = c(
-      "app-metrics  app-metrics app-metrics app-metrics app-metrics app-metrics app-metrics",
-      "app-karma    ...         ...         ...         app-cards   app-cards   app-cards",
-      "app-karma    ...         ...         app-week    app-cards   app-cards   app-cards",
-      "...          ...         app-task    app-task    app-task    ...         ..."
+      "app-metrics  app-metrics app-metrics app-metrics app-metrics app-metrics app-metrics app-metrics",
+      "app-karma    ...         ...         ...         app-cards   app-cards   app-cards   app-cards",
+      "app-karma    ...         ...         app-week    app-week    ...         ...         ...",
+      "...          ...         app-task    app-task    app-task    app-task    ...         ..."
     ),
 
     gridPanel(
