@@ -4,6 +4,7 @@ blankPage(
 
   tags$head(
     tags$link(rel="shortcut icon", href="assets/map/tree.png"),
+    tags$meta(name="apple-mobile-web-app-capable", content="yes"),
     tags$link(rel = "stylesheet", type = "text/css", href = "styles/styles.css")
   ),
 

@@ -1,5 +1,9 @@
 html, body { height: 100%; width: 100%; overflow: hidden; }
 
+body {
+  background-color: #212529 !important;
+}
+
 .metric-wrapper {
   padding-left: 55px;
   position: relative;
@@ -381,4 +385,45 @@ html, body { height: 100%; width: 100%; overflow: hidden; }
   filter: drop-shadow(5px 10px 15px black);
   -webkit-text-stroke-width: 2px;
   -webkit-text-stroke-color: #ffffff33;
+}
+
+#map-mainMap {
+  background: url("//stamen-tiles-a.a.ssl.fastly.net/watercolor/2/4/0.png");
+  background-size: contain;
+}
+
+@media screen AND (min-width: 900px) {
+  #card_stack .card {
+    width: 30vh !important;
+    height: 30vh !important;
+
+    font-size: 140%;
+  }
+}
+
+@media (min-width: 900px) AND (orientation: portrait) {
+  .app-map {
+    height: 50vh !important;
+  }
+
+  #card_stack .card {
+    max-width: 70vw !important;
+    max-height: 70vw !important;
+
+    font-size: 140%;
+  }
+
+  .week-content {
+    color: white;
+  }
+
+  #page-wrapper {
+    grid-template-areas:
+      'app-metrics  app-metrics  app-metrics'
+      'app-karma    app-cards    ...'
+      'app-karma    app-week    ...'
+      '...          app-task     ...' !important;
+    grid-template-rows: 100px 1fr 50px 150px !important;
+    grid-template-columns: 80px 1fr 80px !important;
+  }
 }
