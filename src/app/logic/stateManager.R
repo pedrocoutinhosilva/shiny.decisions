@@ -10,7 +10,7 @@ stateManager <- R6Class("stateManager",
       karma = 60,
       wealth = 50,
       opinion = 50,
-      enviroment = 50,
+      environment = 50,
       week = 1
     )
   ),
@@ -20,7 +20,7 @@ stateManager <- R6Class("stateManager",
       karma = 50,
       wealth = 0,
       opinion = 0,
-      enviroment = 0,
+      environment = 0,
       week = 0
     ),
     # Markers currently in the map
@@ -36,7 +36,7 @@ stateManager <- R6Class("stateManager",
     isDeathState = function() {
       if(self$state$wealth < 1 ||
          self$state$opinion < 1 ||
-         self$state$enviroment < 1
+         self$state$environment < 1
       ) {
         return(TRUE)
       }

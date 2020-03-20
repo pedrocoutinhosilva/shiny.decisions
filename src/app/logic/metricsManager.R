@@ -61,7 +61,7 @@ metrics_ui <- function(id) {
     rows = "80px",
     columns = "1fr 3fr 1fr 3fr 1fr 3fr 1fr",
     areas = c(
-      "... metric-wealth ... metric-opinion ... metric-enviroment ..."
+      "... metric-wealth ... metric-opinion ... metric-environment ..."
     ),
     class = "metrics",
 
@@ -78,9 +78,9 @@ metrics_ui <- function(id) {
       "assets/map/smile.png"
       ),
     metricCard(
-      ns("stateEnviroment"),
-      "Enviroment",
-      "metric-enviroment",
+      ns("stateEnvironment"),
+      "Environment",
+      "metric-environment",
       "assets/map/tree.png"
     )
   )
@@ -110,8 +110,8 @@ server <- function(input, output, session, state) {
   output$stateOpinion <- renderUI(
     progress(ns("stateOpinion"), value = state$opinion, type = "is-opinion")
   )
-  output$stateEnviroment <- renderUI(
-    progress(ns("stateEnviroment"), value = state$enviroment, type = "is-enviroment")
+  output$stateEnvironment <- renderUI(
+    progress(ns("stateEnvironment"), value = state$environment, type = "is-environment")
   )
 }
 

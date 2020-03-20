@@ -288,19 +288,19 @@ body {
     background-color: #e48e22;
     border: none
 }
-.nes-progress.is-enviroment::-webkit-progress-bar {
+.nes-progress.is-environment::-webkit-progress-bar {
     background-color: #fff
 }
 
-.nes-progress.is-enviroment::-webkit-progress-value {
+.nes-progress.is-environment::-webkit-progress-value {
     background-color: #6cab22
 }
 
-.nes-progress.is-enviroment::-moz-progress-bar {
+.nes-progress.is-environment::-moz-progress-bar {
     background-color: #6cab22
 }
 
-.nes-progress.is-enviroment::-ms-fill {
+.nes-progress.is-environment::-ms-fill {
     background-color: #6cab22;
     border: none
 }

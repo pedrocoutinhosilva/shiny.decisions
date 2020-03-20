@@ -130,7 +130,7 @@ deckManager <- R6Class("deckManager",
           karma = cardTemplate$`Left Karma` * intensityMultiplier,
           wealth = cardTemplate$`Left Wealth` * intensityMultiplier,
           opinion = cardTemplate$`Left Opinion` * intensityMultiplier,
-          enviroment = cardTemplate$`Left Enviroment` * intensityMultiplier
+          environment = cardTemplate$`Left Environment` * intensityMultiplier
         )
       )
       right_values = list(
@@ -142,7 +142,7 @@ deckManager <- R6Class("deckManager",
           karma = cardTemplate$`Right Karma` * intensityMultiplier,
           wealth = cardTemplate$`Right Wealth` * intensityMultiplier,
           opinion = cardTemplate$`Right Opinion` * intensityMultiplier,
-          enviroment = cardTemplate$`Right Enviroment` * intensityMultiplier
+          environment = cardTemplate$`Right Environment` * intensityMultiplier
         )
       )
 

@@ -99,7 +99,7 @@ class Carousel {
       karma: Number(carousel.topCard.getAttribute(`delta-${delta_direction}-karma`)),
       wealth: Number(carousel.topCard.getAttribute(`delta-${delta_direction}-wealth`)),
       opinion: Number(carousel.topCard.getAttribute(`delta-${delta_direction}-opinion`)),
-      enviroment: Number(carousel.topCard.getAttribute(`delta-${delta_direction}-enviroment`))
+      environment: Number(carousel.topCard.getAttribute(`delta-${delta_direction}-environment`))
     }).map(attribute => {
       if(attribute[1] !== 0) {
         document.querySelector(`.metric-${attribute[0]}`)
@@ -164,7 +164,7 @@ class Carousel {
             karma: this.topCard.getAttribute('delta-left-karma'),
             wealth: this.topCard.getAttribute('delta-left-wealth'),
             opinion: this.topCard.getAttribute('delta-left-opinion'),
-            enviroment: this.topCard.getAttribute('delta-left-enviroment')
+            environment: this.topCard.getAttribute('delta-left-environment')
           }
         }
 
@@ -173,7 +173,7 @@ class Carousel {
             karma: this.topCard.getAttribute('delta-right-karma'),
             wealth: this.topCard.getAttribute('delta-right-wealth'),
             opinion: this.topCard.getAttribute('delta-right-opinion'),
-            enviroment: this.topCard.getAttribute('delta-right-enviroment')
+            environment: this.topCard.getAttribute('delta-right-environment')
           }
         }
 
@@ -182,7 +182,7 @@ class Carousel {
             karma: delta.karma,
             wealth: delta.wealth,
             opinion: delta.opinion,
-            enviroment: delta.enviroment,
+            environment: delta.environment,
             week: this.topCard.getAttribute('week-increment')
           }, {priority : 'event'})
 
@@ -238,12 +238,12 @@ class Carousel {
       'delta-left-karma': delta.left.karma,
       'delta-left-wealth': delta.left.wealth,
       'delta-left-opinion': delta.left.opinion,
-      'delta-left-enviroment': delta.left.enviroment,
+      'delta-left-environment': delta.left.environment,
 
       'delta-right-karma': delta.right.karma,
       'delta-right-wealth': delta.right.wealth,
       'delta-right-opinion': delta.right.opinion,
-      'delta-right-enviroment': delta.right.enviroment
+      'delta-right-environment': delta.right.environment
     }).map(attribute => {
       card.setAttribute(attribute[0], attribute[1])
     })

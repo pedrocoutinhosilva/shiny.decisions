@@ -84,28 +84,28 @@ server <- function(input, output, session, stateManager, dataManager) {
 
     # Base values for calculating necessary number of markers
     base <- list(
-      enviroment = floor(current$enviroment/10),
+      environment = floor(current$environment/10),
       wealth = floor(current$wealth/10),
       opinion = floor(current$opinion/10)
     )
 
     # Marker categories for stats indicators
     categories <- list()
-    # Enviroment indicators
-    # Trees start at zero and grow with the current enviroment
-    categories$tree <- base$enviroment * 5
-    categories$tree_large <- base$enviroment
-    categories$tree_small <- base$enviroment * 2
-    # Fires appear at 40 enviroment an increase numbers as it gets lower
-    categories$fire <- ifelse(current$enviroment <= 40, (5 - base$enviroment), 0)
-    # Cold appear at 40 enviroment an increase numbers as it gets lower
-    categories$cold <- ifelse(current$enviroment <= 40, (5 - base$enviroment), 0)
-    # Sick appear at 40 enviroment an increase numbers as it gets lower
-    categories$sick <- ifelse(current$enviroment <= 40, (5 - base$enviroment), 0)
-    # Tornados appear at 25 enviroment an increase numbers as it gets lower
-    categories$tornado <- ifelse(current$enviroment <= 25, (3 - base$enviroment), 0)
-    # Thunder appear at 25 enviroment an increase numbers as it gets lower
-    categories$thunder <- ifelse(current$enviroment <= 25, (3 - base$enviroment), 0)
+    # Environment indicators
+    # Trees start at zero and grow with the current environment
+    categories$tree <- base$environment * 5
+    categories$tree_large <- base$environment
+    categories$tree_small <- base$environment * 2
+    # Fires appear at 40 environment an increase numbers as it gets lower
+    categories$fire <- ifelse(current$environment <= 40, (5 - base$environment), 0)
+    # Cold appear at 40 environment an increase numbers as it gets lower
+    categories$cold <- ifelse(current$environment <= 40, (5 - base$environment), 0)
+    # Sick appear at 40 environment an increase numbers as it gets lower
+    categories$sick <- ifelse(current$environment <= 40, (5 - base$environment), 0)
+    # Tornados appear at 25 environment an increase numbers as it gets lower
+    categories$tornado <- ifelse(current$environment <= 25, (3 - base$environment), 0)
+    # Thunder appear at 25 environment an increase numbers as it gets lower
+    categories$thunder <- ifelse(current$environment <= 25, (3 - base$environment), 0)
 
     # Wealth Indicators
     # Broken houses start apearing at 50 wealth and increase numbers as it gets lower
