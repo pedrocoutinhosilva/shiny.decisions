@@ -70,7 +70,7 @@ ui <- function() {
 
           div(class = "title", "About the author"),
           div(class = "name", "Pedro Silva"),
-          div(class = "avatar"),
+          div(class = "avatar", style = "background-image: url(assets/ui/author.png)"),
           div(
             class = "links",
             ui_icon("twitter", "https://twitter.com/sparktuga"),
