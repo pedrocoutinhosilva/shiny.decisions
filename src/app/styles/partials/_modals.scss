@@ -1,0 +1,22 @@
+.modal-content {
+  height: 50vh;
+}
+
+#gameOverScreen {
+  .title, #game_over_message {
+    font-size: 300%;
+  }
+}
+
+.entry-screen {
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+}
+
+@media (orientation: portrait) {
+  .entry-screen {
+    grid-template-rows: 1fr 100px !important;
+    font-size: 140% !important;
+  }
+}
