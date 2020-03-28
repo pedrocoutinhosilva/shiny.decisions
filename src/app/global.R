@@ -21,6 +21,5 @@ sass(
   output = "www/styles/sass.min.css"
 )
 
-swipeCards <- use("components/swipe-cards.R")
-
+# Generic gameManager to initialize ui elements
 gameManager <- use("logic/gameManager.R")$gameManager$new()

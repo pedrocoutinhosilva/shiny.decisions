@@ -4,6 +4,7 @@ import("jsonlite")
 import("glue")
 import("dplyr")
 import("utils")
+import("htmltools")
 
 export("deckManager")
 
@@ -11,6 +12,17 @@ cleanCardMessage <- function(string) {
   stringr::str_replace_all(
     string,
     c("\\{" = "{`", "\\}" = "`}")
+  )
+}
+
+ui <- function(inputId = "card_stack") {
+  tagList(
+    div(
+      id = glue::glue("{inputId}_wrapper"),
+      div(id = inputId)
+    ),
+    tags$script(src = "scripts/hammer.min.js"),
+    tags$script(src = "scripts/card_stack.js")
   )
 }
 
@@ -195,6 +207,7 @@ deckManager <- R6Class("deckManager",
   ),
 
   public = list(
+    ui = ui,
     getCurrentDeck = function() { private$currentDeck },
 
     triggerDeathPhase = function() {

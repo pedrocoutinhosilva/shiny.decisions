@@ -37,7 +37,7 @@ blankPage(
 
     gridPanel(
       class = "app-cards",
-      swipeCards$swipeCardStack()
+      gameManager$ui$cardStack()
     ),
 
     div(
