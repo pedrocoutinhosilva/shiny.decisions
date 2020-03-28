@@ -21,26 +21,14 @@ DataManager <- R6Class("DataManager",
 
   public = list(
     initialize = function(sheetId) {
-
-      online_metadata <- googlesheets::gs_url(
+      sheet_metadata <- googlesheets::gs_url(
           glue::glue("https://docs.google.com/spreadsheets/d/{sheetId}"),
           visibility = "public",
           lookup = FALSE
       )
 
-      if (file.exists("data/sheet_info.json") && file.exists("data/options.xlsx")) {
-        cached_version <- jsonlite::read_json("data/sheet_info.json")$updated[[1]]
-        online_version <- online_metadata$updated
-        is_up_to_date <- as.POSIXct(online_version) %in% c(as.POSIXct(cached_version))
-      } else (
-        is_up_to_date <- FALSE
-      )
-
-      if (!is_up_to_date) {
-        print("Updating from online data")
-        gs_download(online_metadata, to = "data/options.xlsx", overwrite = TRUE)
-        jsonlite::write_json(online_metadata, "data/sheet_info.json")
-      }
+      print("Updating from online data")
+      gs_download(sheet_metadata, to = "data/options.xlsx", overwrite = TRUE)
 
       private$settings  <- readxl::read_xlsx("data/options.xlsx", "Game Settings")
       private$decks     <- readxl::read_xlsx("data/options.xlsx", "Decks")
