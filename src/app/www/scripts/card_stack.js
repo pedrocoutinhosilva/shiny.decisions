@@ -285,6 +285,8 @@ Shiny.addCustomMessageHandler('add_card', addCard)
 
 let gameOver = function(message) {
   modal_gameOverScreen.classList.add('open')
+  modal_attributionScreen.classList.add('open')
+  modal_projectDetailsScreen.classList.add('open')
 
   console.log(document.getElementById('game_over_message'))
 

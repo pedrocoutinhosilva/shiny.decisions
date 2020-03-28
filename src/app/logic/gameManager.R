@@ -15,6 +15,14 @@ metricsManager <- use("logic/metricsManager.R")$metricsManager
 
 dataManager <- use("logic/dataManager.R")$DataManager
 
+ui_icon <- function(icon, link) {
+  tags$a(
+    href = link,
+    target = "_blank",
+    tags$i(class = glue::glue("nes-icon is-large {icon}"))
+  )
+}
+
 game_buttons <- function() {
   div(
     class = "navigation",
@@ -29,7 +37,12 @@ game_buttons <- function() {
           options$id,
           options$text,
           actions = list(
-            click = "modal_entryScreen.classList.remove('open');"
+            click = glue::glue("
+              modal_gameOverScreen.classList.remove('open')
+              modal_entryScreen.classList.remove('open');
+              modal_attributionScreen.classList.remove('open');
+              modal_projectDetailsScreen.classList.remove('open');
+            ")
           )
         )
       }
@@ -41,12 +54,72 @@ game_buttons <- function() {
 ui <- function() {
   tagList(
     modal(
+      "attributionScreen",
+      content = gridPanel(
+        class = "entry-screen nes-container is-dark",
+
+        gridPanel(
+          id = "author-details",
+          areas = c(
+            "title  title title",
+            "avatar name  name ",
+            "avatar links links"
+          ),
+          rows = "25px 25px 65px",
+          columns = "115px 110px 110px",
+
+          div(class = "title", "About the author"),
+          div(class = "name", "Pedro Silva"),
+          div(class = "avatar"),
+          div(
+            class = "links",
+            ui_icon("twitter", "https://twitter.com/sparktuga"),
+            ui_icon("linkedin", "https://www.linkedin.com/in/pedrocoutinhosilva/"),
+            ui_icon("github", "https://github.com/pedrocoutinhosilva"),
+          )
+        )
+      ),
+      open = TRUE,
+      softClose = FALSE,
+      closeButton = FALSE
+    ),
+    modal(
+      "projectDetailsScreen",
+      content = gridPanel(
+        class = "entry-screen nes-container is-dark",
+
+        gridPanel(
+          id = "project-details",
+          areas = c(
+            "title",
+            "... ",
+            "links"
+          ),
+          rows = "25px 25px 65px",
+          columns = "165px",
+
+          div(class = "title", "Repository"),
+          div(
+            class = "links",
+            ui_icon("github", "https://github.com/pedrocoutinhosilva/shiny.decisions"),
+          )
+        )
+      ),
+      open = TRUE,
+      softClose = FALSE,
+      closeButton = FALSE
+    ),
+    modal(
       "entryScreen",
       content = gridPanel(
-        class = "entry-screen",
-        areas = c("intro", "navigation"),
-        rows = "1fr 50px",
+        class = "entry-screen nes-container is-dark",
+        areas = c("intro", "options", "navigation"),
+        rows = "1fr 100px 100px",
 
+        div(
+          class = "options",
+          checkbox("showTutorial", "Show tutorial at start", value = TRUE, class = "is-dark")
+        ),
         div(
           class = "intro",
           p("Welcome to shiny decisions! A game about making the best of bad situations"),
@@ -62,7 +135,7 @@ ui <- function() {
     modal(
       "gameOverScreen",
       content = gridPanel(
-        rows = "1fr 50px",
+        rows = "1fr 100px",
         areas = c("intro", "navigation"),
         class = "entry-screen",
 
@@ -77,9 +150,14 @@ ui <- function() {
           class = "navigation",
           button(
             "restartGame",
-            "Restart Game",
+            "Back to start",
             actions = list(
-              click = "modal_gameOverScreen.classList.remove('open')"
+              click = glue::glue("
+                modal_gameOverScreen.classList.remove('open')
+                modal_entryScreen.classList.add('open');
+                modal_attributionScreen.classList.add('open');
+                modal_projectDetailsScreen.classList.add('open');
+              ")
             )
           )
         )

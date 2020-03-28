@@ -54,10 +54,26 @@ Responsible for creating cards according to the game state and switching between
 
 ---
 
+# Future improvements
+A lot of ideas are still floating around on how to improve this application:
+
+ - Leader board;
+ - More cards!;
+ - Special game modes with different decks and objectives;
+ - Map interactions;
+ - Power up modifiers;
+
+Got any more ideas, questions or feedback? Feel free to get in touch!
+ - Twitter: https://twitter.com/sparktuga
+ - linkedin: https://www.linkedin.com/in/pedrocoutinhosilva
+
+---
+
 # Links
 #### Useful references
  - Modules: https://shiny.rstudio.com/articles/modules.html
  - R6 classes: https://adv-r.hadley.nz/r6.html
+ - SASS: https://github.com/rstudio/sass
 
 #### Assets
  - Images: https://opengameart.org/

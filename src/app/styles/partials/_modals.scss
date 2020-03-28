@@ -1,6 +1,7 @@
-.modal-content {
-  height: 50vh;
+.modal {
+  background-color: rgba(0, 0, 0, 0.8) !important;
 }
+
 
 #gameOverScreen {
   .title, #game_over_message {
@@ -12,11 +13,105 @@
   text-align: center;
   justify-content: center;
   align-items: center;
+
+  button {
+    margin: 15px;
+  }
 }
 
 @media (orientation: portrait) {
   .entry-screen {
-    grid-template-rows: 1fr 100px !important;
+    grid-template-rows: 1fr 150px !important;
     font-size: 140% !important;
+  }
+}
+
+#entryScreen {
+  .modal-content {
+    margin-top: 10vh !important;
+    margin-bottom: calc(15vh + 200px) !important;
+  }
+}
+
+#attributionScreen {
+  pointer-events: none;
+
+  background: transparent !important;
+  z-index: 10001 !important;
+  .modal-content {
+    .title {
+      text-decoration: underline;
+    }
+
+    .links {
+      pointer-events: all;
+    }
+
+    background: transparent !important;
+
+    width: 427px !important;
+    height: 200px !important;
+    padding: 0 !important;
+
+    margin-left: 10vw !important;
+    margin-bottom: 10vh !important;
+
+    @media (orientation: portrait) {
+      font-size: 75%;
+    }
+  }
+
+  #author-details {
+    text-align: left;
+    grid-gap: 10px;
+    margin: 0 !important;
+
+    .avatar {
+      background: url("/assets/ui/author.png");
+      background-size: contain;
+      background-repeat: no-repeat;
+    }
+  }
+}
+
+#projectDetailsScreen {
+  pointer-events: none;
+
+  background: transparent !important;
+  z-index: 10001 !important;
+  .modal-content {
+
+    .title {
+      text-decoration: underline;
+    }
+
+    .links {
+      pointer-events: all;
+    }
+
+    background: transparent !important;
+
+    width: 237px !important;
+    height: 200px !important;
+    padding: 0 !important;
+
+    margin-right: 10vw !important;
+    margin-bottom: 10vh !important;
+
+    @media (orientation: portrait) {
+      font-size: 75%;
+    }
+  }
+
+  #project-details {
+    text-align: left;
+    grid-gap: 10px;
+    margin: 0 !important;
+
+    .avatar {
+      background: url("/assets/ui/author.png");
+      background-size: contain;
+      background-repeat: no-repeat;
+    }
   }
 }

@@ -7,19 +7,13 @@ function(input, output, session) {
     session$userData$gameManager$updateState(input$update_state)
   })
 
-  observeEvent(input$startGame, {
-    session$userData$gameManager$startGame()
-  })
   observeEvent(input$startGameEasy, {
-    session$userData$gameManager$startGame("Easy")
+    session$userData$gameManager$startGame("Easy", !input$showTutorial)
   })
   observeEvent(input$startGameMedium, {
-    session$userData$gameManager$startGame("Medium")
+    session$userData$gameManager$startGame("Medium", !input$showTutorial)
   })
   observeEvent(input$startGameHard, {
-    session$userData$gameManager$startGame("Hard")
-  })
-  observeEvent(input$restartGame, {
-    session$userData$gameManager$resetGame()
+    session$userData$gameManager$startGame("Hard", !input$showTutorial)
   })
 }
