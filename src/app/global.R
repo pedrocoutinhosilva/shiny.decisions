@@ -12,6 +12,13 @@ library(dplyr)
 library(jsonlite)
 library(modules)
 library(sass)
+library(readxl)
+
+# Remember to install github packages if you dont have them already.
+# library(devtools)
+# install.packages(devtools)
+# devtools::install_github('pedrocoutinhosilva/shiny.grid')
+# devtools::install_github('pedrocoutinhosilva/shiny.blank')
 
 # Process and minify styles
 sass(

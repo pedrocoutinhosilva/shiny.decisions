@@ -7,6 +7,18 @@ If any of those metrics reaches zero, its game over! How long can you last?
 
 ---
 
+# Installation
+Some of the packages included in this project are currently only available on github. This includes `shiny.grid` and `shiny.blank`. To install them locally remember to run on your machine the following commands:
+
+```
+library(devtools)
+install.packages(devtools)
+devtools::install_github('pedrocoutinhosilva/shiny.grid')
+devtools::install_github('pedrocoutinhosilva/shiny.blank')
+```
+
+---
+
 # UI
 The game UI has 3 main areas:
 
