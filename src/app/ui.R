@@ -3,6 +3,7 @@ blankPage(
   theme = "nes",
 
   tags$head(
+    tags$head(includeHTML(("google-analytics.html"))),
     tags$link(rel="shortcut icon", href="assets/map/tree.png"),
     tags$meta(name="apple-mobile-web-app-capable", content="yes"),
     tags$link(rel = "stylesheet", type = "text/css", href = "styles/sass.min.css")
