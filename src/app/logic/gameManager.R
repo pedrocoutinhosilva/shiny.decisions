@@ -246,6 +246,15 @@ gameManager <- R6Class("gameManager",
       )
       private$mapManager$updateState(private$session)
 
+      private$session$sendCustomMessage(
+        "trackEvent",
+        list(
+          category = "Game state",
+          action = "Game started",
+          label = glue::glue("Game started, dificulty {gameType}")
+        )
+      )
+
       private$session$sendCustomMessage( "add_card", self$popCard())
     },
 
@@ -267,6 +276,14 @@ gameManager <- R6Class("gameManager",
         private$session$sendCustomMessage(
           "game_over",
           private$stateManager$state$week
+        )
+        private$session$sendCustomMessage(
+          "trackEvent",
+          list(
+            category = "Game state",
+            action = "Game end",
+            label = glue::glue("Game ended, score was {private$stateManager$state$week}")
+          )
         )
       } else {
         private$session$sendCustomMessage("add_card", card)

@@ -4,6 +4,7 @@ blankPage(
 
   tags$head(
     tags$head(includeHTML(("google-analytics.html"))),
+    tags$script(src = "scripts/analytics-events.js"),
     tags$link(rel="shortcut icon", href="assets/map/tree.png"),
     tags$meta(name="apple-mobile-web-app-capable", content="yes"),
     tags$link(rel = "stylesheet", type = "text/css", href = "styles/sass.min.css")
