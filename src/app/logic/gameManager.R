@@ -53,6 +53,19 @@ game_buttons <- function() {
 # data related to game state
 ui <- function() {
   tagList(
+    div(
+      id = "pause-game",
+      style = "background-image: url(assets/ui/pause.png)"
+    ),
+    tags$script(glue::glue(
+      '$( document ).ready(function() {{
+        $("#pause-game").on("click", function(e){{
+          modal_entryScreen.classList.toggle("open");
+          modal_attributionScreen.classList.toggle("open");
+          modal_projectDetailsScreen.classList.toggle("open");
+        }});
+      }});'
+    )),
     modal(
       "attributionScreen",
       content = gridPanel(
@@ -153,7 +166,7 @@ ui <- function() {
             "Back to start",
             actions = list(
               click = glue::glue("
-                modal_gameOverScreen.classList.remove('open')
+                modal_gameOverScreen.classList.remove('open');
                 modal_entryScreen.classList.add('open');
                 modal_attributionScreen.classList.add('open');
                 modal_projectDetailsScreen.classList.add('open');
@@ -221,6 +234,8 @@ gameManager <- R6Class("gameManager",
     },
 
     startGame = function(gameType, skipTutorial = FALSE) {
+      private$session$sendCustomMessage( "clear_card_stack", TRUE)
+
       private$resetState()
       private$stateManager$resetState()
       private$deckManager$resetState(

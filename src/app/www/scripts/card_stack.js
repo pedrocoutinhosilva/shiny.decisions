@@ -288,3 +288,8 @@ let gameOver = function(message) {
   document.getElementById('game_over_message').innerHTML = message
 }
 Shiny.addCustomMessageHandler('game_over', gameOver)
+
+let clearCardStack = function(message) {
+  $("#card_stack .card").remove()
+}
+Shiny.addCustomMessageHandler('clear_card_stack', clearCardStack)

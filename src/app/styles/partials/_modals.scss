@@ -4,6 +4,8 @@
 
 
 #gameOverScreen {
+  z-index: 100100;
+
   .title, #game_over_message {
     font-size: 300%;
   }
@@ -113,4 +115,19 @@
       background-repeat: no-repeat;
     }
   }
+}
+
+#pause-game {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  height: 1.5cm;
+  width: 1.5cm;
+  z-index: 10010;
+  background-size: contain;
+  cursor: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAzElEQ…LaE7j/h8fnASkxHTz0DGIBMCnBeeM7AArpUd3mz2x3C7wADglA8BcWMZhZAAAAAElFTkSuQmCC) 14 0,pointer;
+  background-color: #d1d1d1;
+  border-radius: 50%;
+  image-rendering: pixelated;
+  filter: hue-rotate(-160deg) drop-shadow(2px 4px 6px black);
 }
