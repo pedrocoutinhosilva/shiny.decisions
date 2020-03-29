@@ -15,8 +15,8 @@ library(sass)
 library(readxl)
 
 # Remember to install github packages if you dont have them already.
+# install.packages('devtools')
 # library(devtools)
-# install.packages(devtools)
 # devtools::install_github('pedrocoutinhosilva/shiny.grid')
 # devtools::install_github('pedrocoutinhosilva/shiny.blank')
 
