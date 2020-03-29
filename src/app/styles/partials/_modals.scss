@@ -4,7 +4,7 @@
 
 
 #gameOverScreen {
-  z-index: 100100;
+  z-index: 100100 !important;
 
   .title, #game_over_message {
     font-size: 300%;
