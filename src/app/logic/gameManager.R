@@ -19,6 +19,7 @@ ui_icon <- function(icon, link) {
   tags$a(
     href = link,
     target = "_blank",
+    onclick = glue::glue("sendAnalyticsEvent({{category: 'social', action: '{icon}', label: '{icon}'}})"),
     tags$i(class = glue::glue("nes-icon is-large {icon}"))
   )
 }
