@@ -80,7 +80,7 @@ Each task as 2 possible decisions, left or right. Simply drag and hold the card 
 
 #### Game end
 when one of the metrics reaches zero, the game is over and you will be taken to the end game screen. Here you can see how many weeks you lasted, as well as return to the initial screen in case you want to go again.
-![gameover](screenshots/gameover.gif "gameover")
+![gameover](screenshots/gameover.png "gameover")
 
 ---
 
