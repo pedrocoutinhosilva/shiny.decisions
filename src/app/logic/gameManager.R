@@ -273,7 +273,7 @@ gameManager <- R6Class("gameManager",
       private$mapManager$updateState(private$session)
       card <- self$popCard()
 
-      if (!is.null(card) && card == "GAMEOVER") {
+      if (identical(card, "GAMEOVER")) {
         private$session$sendCustomMessage(
           "game_over",
           private$stateManager$state$week

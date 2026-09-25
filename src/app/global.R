@@ -5,7 +5,6 @@ library(htmltools)
 library(tidyr)
 library(leaflet)
 library(R6)
-library(googlesheets)
 library(glue)
 library(utils)
 library(dplyr)
@@ -20,11 +19,15 @@ library(readxl)
 # devtools::install_github('pedrocoutinhosilva/shiny.grid')
 # devtools::install_github('pedrocoutinhosilva/shiny.blank')
 
-# Process and minify styles
-sass(
-  sass::sass_file("styles/main.scss"),
-  options = sass_options(output_style = "compressed"),
-  output = "www/styles/sass.min.css"
+# Process and minify styles. The compiled file is committed, so a read-only
+# deploy can skip this.
+tryCatch(
+  sass(
+    sass::sass_file("styles/main.scss"),
+    options = sass_options(output_style = "compressed"),
+    output = "www/styles/sass.min.css"
+  ),
+  error = function(e) message("Skipping sass build: ", conditionMessage(e))
 )
 
 # Generic gameManager to initialize ui elements

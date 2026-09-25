@@ -21,6 +21,9 @@ devtools::install_github('pedrocoutinhosilva/shiny.grid')
 devtools::install_github('pedrocoutinhosilva/shiny.blank')
 ```
 
+## Deploying (Posit Connect Cloud)
+Publish from GitHub with primary file `src/app/app.R`. Connect Cloud installs packages from `src/app/manifest.json`; after changing packages, regenerate it from `src/app` with `rsconnect::writeManifest(appPrimaryDoc = "app.R")`, with `shiny.grid` and `shiny.blank` installed from GitHub.
+
 ---
 
 # Starting a game

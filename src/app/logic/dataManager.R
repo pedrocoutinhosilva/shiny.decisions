@@ -1,7 +1,7 @@
 import("R6")
-import("googlesheets")
 import("tidyr")
 import("glue")
+import("utils")
 
 export("DataManager")
 
@@ -23,13 +23,21 @@ DataManager <- R6Class("DataManager",
     initialize = function(sheetId, force_update = FALSE) {
       if (force_update) {
         print("Updating from online data")
-        
-        sheet_metadata <- googlesheets::gs_url(
-          glue::glue("https://docs.google.com/spreadsheets/d/{sheetId}"),
-          visibility = "public",
-          lookup = FALSE
-        )
-        gs_download(sheet_metadata, to = "data/options.xlsx", overwrite = TRUE)        
+
+        # The sheet is public, so its xlsx export needs no authentication.
+        # Download to a temp file first so a failure keeps the cached copy.
+        tryCatch({
+          download <- tempfile(fileext = ".xlsx")
+          utils::download.file(
+            glue::glue("https://docs.google.com/spreadsheets/d/{sheetId}/export?format=xlsx"),
+            download,
+            mode = "wb",
+            quiet = TRUE
+          )
+          file.copy(download, "data/options.xlsx", overwrite = TRUE)
+        }, error = function(e) {
+          message("Using cached options.xlsx: ", conditionMessage(e))
+        })
       }
 
       private$settings  <- readxl::read_xlsx("data/options.xlsx", "Game Settings")

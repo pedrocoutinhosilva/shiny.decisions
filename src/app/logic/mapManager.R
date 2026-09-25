@@ -69,8 +69,16 @@ server <- function(input, output, session, stateManager, dataManager) {
         minZoom = 2,
         maxZoom = 2)
       ) %>%
-      addProviderTiles("Stamen.Watercolor",
-        options = providerTileOptions(noWrap = TRUE)
+      # Stamen's tile servers are gone; Cooper Hewitt hosts an archive of
+      # the Watercolor tiles that needs no API key.
+      addTiles(
+        urlTemplate = "https://watercolormaps.collection.cooperhewitt.org/tile/watercolor/{z}/{x}/{y}.jpg",
+        attribution = paste(
+          "Map tiles by <a href=\"https://stamen.com\">Stamen Design</a>,",
+          "hosted by <a href=\"https://watercolormaps.collection.cooperhewitt.org\">Cooper Hewitt</a>,",
+          "under CC BY 3.0. Data by <a href=\"https://openstreetmap.org\">OpenStreetMap</a>, under CC BY SA."
+        ),
+        options = tileOptions(noWrap = TRUE)
       ) %>%
       setView(0, 0, 2)
   })
