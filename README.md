@@ -5,7 +5,7 @@ In shiny decisions your goal is to last as long as possible while making decisio
 
 If any of those metrics reaches zero, its game over! How long can you last?
 
-Live version: https://sparktuga.shinyapps.io/ShinyDecisions/ 
+Live version: https://shiny-decisions.pedrocsilva.com 
 
 ![Screenshot](screenshots/shiny-decisions-large.png "Game screen")
 
